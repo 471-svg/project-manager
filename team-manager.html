@@ -368,6 +368,10 @@
 
   .task-actions { display: flex; gap: 4px; opacity: 0; transition: opacity .15s; }
   .task-card:hover .task-actions { opacity: 1; }
+  @media (hover: none) {
+    .task-actions { opacity: 1; }
+    button, .member-chip, .task-check { min-height: 40px; min-width: 40px; }
+  }
 
   /* 空状態 */
   .empty-state {
