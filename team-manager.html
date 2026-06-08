@@ -723,6 +723,7 @@
       <div class="color-picker" id="color-picker"></div>
     </div>
     <div class="modal-actions">
+      <button class="btn-danger" id="proj-delete-btn" onclick="deleteProjectConfirm()" style="margin-right:auto">削除</button>
       <button class="btn-secondary" onclick="closeModal('modal-project')">キャンセル</button>
       <button class="btn-primary"   id="proj-modal-btn" onclick="saveProject()">作成</button>
     </div>
@@ -1149,6 +1150,7 @@ function openProjectModal(editProj = null) {
   document.getElementById("proj-modal-title").textContent = isEdit ? "プロジェクトを編集" : "新しいプロジェクト";
   document.getElementById("proj-modal-btn").textContent   = isEdit ? "保存"               : "作成";
   document.getElementById("proj-name-input").value        = isEdit ? editProj.name : "";
+  document.getElementById("proj-delete-btn").classList.toggle("hidden", !isEdit);
   state.selectedColor = isEdit ? editProj.color : COLORS[0];
 
   // カラーピッカー描画
@@ -1197,6 +1199,23 @@ async function saveProject() {
     renderProjectList();
     closeModal("modal-project");
   } catch (e) { toast(e.message, true); }
+}
+
+async function deleteProjectConfirm() {
+  if (!state.editProj || !confirm(`「${state.editProj.name}」を削除しますか？\nプロジェクト内のタスクもすべて削除されます。`)) return;
+  try {
+    await api("deleteProject", { workspace: state.workspace, projectId: state.editProj.id });
+    state.projects = state.projects.filter(p => p.id !== state.editProj.id);
+    if (state.activeProj?.id === state.editProj.id) {
+      state.activeProj = null;
+      state.tasks = [];
+      document.getElementById("project-view").classList.add("hidden");
+      document.getElementById("no-project-msg").classList.remove("hidden");
+    }
+    closeModal("modal-project");
+    renderProjectList();
+    toast("プロジェクトを削除しました");
+  } catch(e) { toast(e.message, true); }
 }
 
 // ============================================================
