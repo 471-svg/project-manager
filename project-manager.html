@@ -609,7 +609,7 @@ function renderProjectPage(id) {
     ${todoItems || '<div style="color:var(--text3);font-size:13px;padding:8px 0">下から追加しよう</div>'}
     <div class="add-row">
       <input type="text" id="new-todo-input" placeholder="新しいTodoを追加..."
-        onkeydown="if(event.key==='Enter')addTodo(${p.id})">
+        onkeydown="if(event.key==='Enter'&&!event.isComposing)addTodo(${p.id})">
       <button class="btn btn-accent" style="--accent:${col.hex};white-space:nowrap" onclick="addTodo(${p.id})">追加</button>
     </div>
   </div>`;
