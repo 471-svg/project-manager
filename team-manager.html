@@ -201,6 +201,42 @@
 
   .project-name-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+  .project-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+
+  .project-pct {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  .project-item.active .project-pct { color: var(--accent); }
+
+  .project-remaining {
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .proj-mini-bar {
+    width: 48px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .proj-mini-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width .4s;
+  }
+
   .sidebar-bottom {
     padding: 12px 8px;
     border-top: 1px solid var(--border);
@@ -789,10 +825,11 @@ let state = {
   members    : [],
   projects   : [],
   tasks      : [],
+  stats      : {},   // { projectId: { total, done } }
   activeProj : null,
-  editProj   : null,  // 編集中プロジェクト
-  editTask   : null,  // 編集中タスク
-  filterUser : "all", // "all" or memberName
+  editProj   : null,
+  editTask   : null,
+  filterUser : "all",
   selectedColor: COLORS[0],
 };
 
@@ -1042,7 +1079,7 @@ async function enterWorkspace(wsName) {
   document.getElementById("login-screen").classList.add("hidden");
   document.getElementById("app-screen").classList.remove("hidden");
 
-  await Promise.all([loadMembers(), loadProjects()]);
+  await Promise.all([loadMembers(), loadProjects(), loadStats()]);
 }
 
 function doLogout() {
@@ -1119,18 +1156,34 @@ async function loadProjects() {
   renderProjectList();
 }
 
+async function loadStats() {
+  state.stats = await api("getProjectStats", { workspace: state.workspace });
+  renderProjectList();
+}
+
 function renderProjectList() {
   const el = document.getElementById("project-list");
   if (!state.projects.length) {
     el.innerHTML = '<p style="color:var(--muted);font-size:12px;padding:8px 12px">プロジェクトがありません</p>';
     return;
   }
-  el.innerHTML = state.projects.map(p => `
+  el.innerHTML = state.projects.map(p => {
+    const s   = state.stats[p.id] || { total: 0, done: 0 };
+    const pct = s.total ? Math.round(s.done / s.total * 100) : 0;
+    const rem = s.total - s.done;
+    return `
     <div class="project-item ${p.id === (state.activeProj?.id) ? 'active' : ''}" onclick="selectProject('${p.id}')">
       <span class="project-dot" style="background:${p.color}"></span>
       <span class="project-name-text">${esc(p.name)}</span>
+      <div class="project-meta">
+        <span class="project-pct">${pct}%</span>
+        <div class="proj-mini-bar">
+          <div class="proj-mini-bar-fill" style="width:${pct}%;background:${p.color}"></div>
+        </div>
+        ${s.total ? `<span class="project-remaining">残り${rem}</span>` : ""}
+      </div>
     </div>
-  `).join("");
+  `}).join("");
 }
 
 async function selectProject(id) {
@@ -1228,8 +1281,19 @@ async function deleteProjectConfirm() {
 async function loadTasks() {
   if (!state.activeProj) return;
   state.tasks = await api("getTasks", { workspace: state.workspace, projectId: state.activeProj.id });
+  updateStats();
   renderTasks();
   renderFilterChips();
+}
+
+function updateStats() {
+  const id = state.activeProj?.id;
+  if (!id) return;
+  state.stats[id] = {
+    total: state.tasks.length,
+    done : state.tasks.filter(t => t.done).length,
+  };
+  renderProjectList();
 }
 
 function renderFilterChips() {
@@ -1304,6 +1368,7 @@ async function addTask() {
     state.tasks.push(t);
     nameEl.value      = "";
     assigneeEl.value  = "";
+    updateStats();
     renderTasks();
     toast("タスクを追加しました");
   } catch (e) { toast(e.message, true); }
@@ -1313,6 +1378,7 @@ async function toggleTask(id) {
   const t = state.tasks.find(t => t.id === id);
   if (!t) return;
   t.done = !t.done;
+  updateStats();
   renderTasks();
   try {
     await api("updateTask", {
@@ -1366,6 +1432,7 @@ async function deleteTaskConfirm() {
     });
     state.tasks = state.tasks.filter(t => t.id !== state.editTask.id);
     closeModal("modal-task");
+    updateStats();
     renderTasks();
     toast("削除しました");
   } catch (e) { toast(e.message, true); }

@@ -47,6 +47,7 @@ function handleRequest(e) {
     updateProject   : updateProject,
     deleteProject   : deleteProject,
     // タスク
+    getProjectStats : getProjectStats,
     getTasks        : getTasks,
     createTask      : createTask,
     updateTask      : updateTask,
@@ -182,6 +183,21 @@ function deleteProject({ workspace, projectId }) {
 // ----------------------------------------------------------
 // タスク
 // ----------------------------------------------------------
+
+function getProjectStats({ workspace }) {
+  requireParams({ workspace });
+  // ワークスペース内の全プロジェクトIDを取得
+  const projects = getSheet(SHEET_PROJECTS).getDataRange().getValues().slice(1)
+    .filter(r => r[1] === workspace).map(r => r[0]);
+
+  const tasks = getSheet(SHEET_TASKS).getDataRange().getValues().slice(1);
+  const stats = {};
+  projects.forEach(id => {
+    const t = tasks.filter(r => r[1] === id);
+    stats[id] = { total: t.length, done: t.filter(r => r[4] === true || r[4] === "TRUE").length };
+  });
+  return stats;
+}
 
 function getTasks({ workspace, projectId }) {
   requireParams({ workspace, projectId });
