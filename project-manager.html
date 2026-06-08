@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>制作管理</title>
+<link rel="manifest" href="manifest.json">
 <style>
   :root {
     --bg: #f7f6f2;
@@ -767,6 +768,10 @@ function changeColor(projId, colorId, el) {
 
 // Init
 showPage('new');
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js');
+}
 </script>
 </body>
 </html>

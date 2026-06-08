@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>制作管理 — Project Manager</title>
+<link rel="manifest" href="manifest.json">
+<style>
+  :root {
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.1);
+    --text: #1a1a18;
+    --text2: #6b6b66;
+    --text3: #a8a8a2;
+    --font: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a;
+      --surface: #252523;
+      --border: rgba(255,255,255,0.09);
+      --text: #f0efe9;
+      --text2: #9a9a94;
+      --text3: #5a5a56;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    padding: 3rem 2.5rem;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+  }
+  .icon {
+    font-size: 3.5rem;
+    margin-bottom: 1.25rem;
+    display: block;
+  }
+  h1 {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  .desc {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  .features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 2rem;
+    text-align: left;
+  }
+  .feature {
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+  .feature-icon { display: block; font-size: 18px; margin-bottom: 4px; }
+  .btn-row { display: flex; flex-direction: column; gap: 10px; }
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: var(--font);
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.15s, transform 0.1s;
+    border: none;
+    font-weight: 500;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary {
+    background: var(--text);
+    color: var(--bg);
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text2);
+    border: 0.5px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--bg); }
+  #install-btn { display: none; }
+  .note {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 1.5rem;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <span class="icon">📋</span>
+  <h1>制作管理</h1>
+  <p class="desc">制作プロジェクトのTodo・進捗をシンプルに管理するツール。飽きずにちょこちょこ進めるために作りました。</p>
+
+  <div class="features">
+    <div class="feature">
+      <span class="feature-icon">🎨</span>
+      プロジェクトごとに色分け
+    </div>
+    <div class="feature">
+      <span class="feature-icon">📊</span>
+      進捗をグラフで可視化
+    </div>
+    <div class="feature">
+      <span class="feature-icon">✅</span>
+      Todoで工程を管理
+    </div>
+    <div class="feature">
+      <span class="feature-icon">↕️</span>
+      優先度順に並び替え
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" id="install-btn">
+      📲 アプリとしてインストール
+    </button>
+    <a class="btn btn-primary" href="project-manager.html" id="open-btn">
+      ▶ ブラウザで開く
+    </a>
+    <a class="btn btn-secondary" href="project-manager.html" download>
+      ⬇ HTMLファイルをダウンロード
+    </a>
+  </div>
+
+  <p class="note">データはお使いのブラウザ内に保存されます。<br>インターネット接続なしでも動作します。</p>
+</div>
+
+<script>
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-btn').style.display = 'flex';
+  document.getElementById('open-btn').style.display = 'none';
+});
+
+document.getElementById('install-btn').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const result = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  if (result.outcome === 'accepted') {
+    document.getElementById('install-btn').style.display = 'none';
+    document.getElementById('open-btn').style.display = 'flex';
+  }
+});
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('install-btn').style.display = 'none';
+  document.getElementById('open-btn').style.display = 'flex';
+});
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js');
+}
+</script>
+</body>
+</html>

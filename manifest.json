@@ -1,0 +1,16 @@
+{
+  "name": "制作管理",
+  "short_name": "制作管理",
+  "description": "制作プロジェクトのTodo・進捗を管理するツール",
+  "start_url": "./project-manager.html",
+  "display": "standalone",
+  "background_color": "#f7f6f2",
+  "theme_color": "#1a1a18",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a1a18'/><text y='.9em' font-size='70' x='15'>📋</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
