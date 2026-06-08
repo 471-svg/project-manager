@@ -112,6 +112,39 @@
     margin-top: 1.5rem;
     line-height: 1.6;
   }
+  .divider {
+    border: none;
+    border-top: 0.5px solid var(--border);
+    margin: 2rem 0 1.5rem;
+  }
+  .team-section { text-align: left; }
+  .team-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .team-card {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: var(--text);
+    transition: opacity .15s, transform .1s;
+    border: 0.5px solid var(--border);
+  }
+  .team-card:hover { opacity: .8; }
+  .team-card:active { transform: scale(.98); }
+  .team-card-icon { font-size: 28px; flex-shrink: 0; }
+  .team-card-body { flex: 1; }
+  .team-card-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+  .team-card-desc  { font-size: 12px; color: var(--text2); line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -152,6 +185,20 @@
   </div>
 
   <p class="note">データはお使いのブラウザ内に保存されます。<br>インターネット接続なしでも動作します。</p>
+
+  <hr class="divider">
+
+  <div class="team-section">
+    <span class="team-label">チームで使う</span>
+    <a class="team-card" href="team-manager.html">
+      <span class="team-card-icon">👥</span>
+      <div class="team-card-body">
+        <p class="team-card-title">チーム制作管理</p>
+        <p class="team-card-desc">複数人でプロジェクトを共有。担当者の割り当て・進捗をリアルタイムで確認できます。</p>
+      </div>
+      <span style="color:var(--text3);font-size:16px">›</span>
+    </a>
+  </div>
 </div>
 
 <script>
