@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>制作管理</title>
+<style>
+  :root {
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --surface2: #f0efe9;
+    --border: rgba(0,0,0,0.1);
+    --border2: rgba(0,0,0,0.18);
+    --text: #1a1a18;
+    --text2: #6b6b66;
+    --text3: #a8a8a2;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --font: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #18181614;
+      --bg: #1c1c1a;
+      --surface: #252523;
+      --surface2: #2e2e2b;
+      --border: rgba(255,255,255,0.09);
+      --border2: rgba(255,255,255,0.16);
+      --text: #f0efe9;
+      --text2: #9a9a94;
+      --text3: #5a5a56;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  /* Layout */
+  .app { display: flex; height: 100vh; overflow: hidden; }
+  .sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 0.5px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+  }
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    background: var(--bg);
+    padding: 2rem;
+  }
+
+  /* Sidebar */
+  .sidebar-header {
+    padding: 1.25rem 1rem 0.75rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .sidebar-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--text3);
+    text-transform: uppercase;
+  }
+  .sidebar-nav { padding: 0.5rem 0; flex: 1; overflow-y: auto; }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 1rem;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 0;
+    color: var(--text2);
+    transition: background 0.15s;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: var(--font);
+  }
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active { background: var(--surface2); color: var(--text); font-weight: 500; }
+  .nav-item.dragging { opacity: 0.4; }
+  .nav-item.drag-over { border-top: 2px solid var(--text2); }
+  .drag-handle { cursor: grab; color: var(--text3); font-size: 12px; flex-shrink: 0; line-height: 1; padding: 0 2px; }
+  .drag-handle:active { cursor: grabbing; }
+  .nav-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .nav-progress {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--text3);
+  }
+  .sidebar-footer {
+    padding: 0.75rem 1rem;
+    border-top: 0.5px solid var(--border);
+  }
+
+  /* Buttons */
+  button { cursor: pointer; font-family: var(--font); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px;
+    font-size: 13px;
+    border-radius: var(--radius-sm);
+    border: 0.5px solid var(--border2);
+    background: var(--surface);
+    color: var(--text);
+    transition: background 0.15s, opacity 0.15s;
+    font-family: var(--font);
+  }
+  .btn:hover { background: var(--surface2); }
+  .btn-accent {
+    background: var(--accent, #1a1a18);
+    color: #fff;
+    border-color: transparent;
+  }
+  .btn-accent:hover { opacity: 0.85; background: var(--accent, #1a1a18); }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+  .btn-ghost { border: none; background: none; color: var(--text3); padding: 4px 6px; }
+  .btn-ghost:hover { color: var(--text2); background: var(--surface2); border-radius: 4px; }
+
+  /* Form */
+  input[type="text"], textarea, select {
+    font-family: var(--font);
+    font-size: 14px;
+    background: var(--surface2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    padding: 8px 12px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input[type="text"]:focus, textarea:focus, select:focus {
+    border-color: var(--border2);
+  }
+  textarea { resize: vertical; min-height: 72px; line-height: 1.6; }
+  label { font-size: 13px; color: var(--text2); display: block; margin-bottom: 5px; }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Color picker */
+  .color-options { display: flex; gap: 8px; flex-wrap: wrap; }
+  .color-opt {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.15s, border-color 0.15s;
+    position: relative;
+  }
+  .color-opt:hover { transform: scale(1.15); }
+  .color-opt.selected { border-color: var(--text); }
+  .color-opt.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 12px;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+
+  /* Progress ring */
+  .progress-ring-wrap {
+    display: flex; align-items: center; gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .ring-svg { transform: rotate(-90deg); }
+  .ring-track { fill: none; stroke: var(--surface2); stroke-width: 8; }
+  .ring-fill { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
+  .ring-label { text-anchor: middle; dominant-baseline: central; }
+
+  /* Stats */
+  .stats-row { display: flex; gap: 10px; margin-bottom: 1.5rem; }
+  .stat-box {
+    flex: 1;
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-num { font-size: 24px; font-weight: 500; }
+  .stat-lbl { font-size: 12px; color: var(--text3); margin-top: 2px; }
+
+  /* Todo list */
+  .todo-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--border);
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+  .todo-item:last-child { border-bottom: none; }
+  .todo-check {
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    border: 1.5px solid var(--border2);
+    appearance: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: background 0.15s, border-color 0.15s;
+    position: relative;
+  }
+  .todo-check:checked { border-color: transparent; }
+  .todo-check:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-52%);
+    font-size: 11px;
+    color: #fff;
+  }
+  .todo-text { flex: 1; font-size: 14px; line-height: 1.6; }
+  .todo-text.done { color: var(--text3); text-decoration: line-through; }
+  .add-row { display: flex; gap: 8px; margin-top: 12px; }
+  .add-row input { flex: 1; }
+
+  /* Progress dots */
+  .dots-row { display: flex; gap: 5px; margin-bottom: 1.5rem; }
+  .dot {
+    flex: 1; height: 6px; border-radius: 3px;
+    transition: background 0.3s;
+  }
+
+  /* New project form */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-field { margin-bottom: 1rem; }
+  .form-field.full { grid-column: 1 / -1; }
+
+  /* Project list cards in sidebar */
+  .sidebar-section-label {
+    font-size: 11px;
+    color: var(--text3);
+    padding: 8px 1rem 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* Header */
+  .page-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .page-title { font-size: 20px; font-weight: 500; }
+
+  /* Color accent bar */
+  .accent-bar {
+    height: 3px;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+  }
+
+  /* Empty state */
+  .empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text3);
+    font-size: 14px;
+  }
+  .empty-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">制作管理</div>
+    </div>
+    <div class="sidebar-nav" id="sidebar-nav">
+      <button class="nav-item active" onclick="showPage('new')" id="nav-new">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0">
+          <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        新しいプロジェクト
+      </button>
+      <div class="sidebar-section-label" id="proj-section-label" style="display:none">プロジェクト</div>
+      <div id="proj-nav-list"></div>
+    </div>
+    <div class="sidebar-footer">
+      <div style="font-size:11px;color:var(--text3)">データはブラウザに保存されます</div>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <div class="main" id="main-area">
+    <!-- Pages injected here -->
+  </div>
+
+</div>
+
+<script>
+const COLORS = [
+  { id:'coral',  hex:'#E05C3A', label:'コーラル' },
+  { id:'amber',  hex:'#D4850A', label:'アンバー' },
+  { id:'lime',   hex:'#5A9E1F', label:'グリーン' },
+  { id:'teal',   hex:'#0D8A6A', label:'ティール' },
+  { id:'sky',    hex:'#1A7FC4', label:'ブルー' },
+  { id:'violet', hex:'#6A4FCC', label:'パープル' },
+  { id:'pink',   hex:'#C4387A', label:'ピンク' },
+  { id:'slate',  hex:'#556070', label:'スレート' },
+];
+
+let projects = JSON.parse(localStorage.getItem('pm_projects') || '[]');
+let currentPage = 'new';
+let currentProjId = null;
+
+function save() {
+  localStorage.setItem('pm_projects', JSON.stringify(projects));
+}
+
+function getColor(colorId) {
+  return COLORS.find(c => c.id === colorId) || COLORS[4];
+}
+
+// ---- Sidebar ----
+let dragSrcId = null;
+
+function renderSidebar() {
+  const list = document.getElementById('proj-nav-list');
+  const label = document.getElementById('proj-section-label');
+  label.style.display = projects.length ? 'block' : 'none';
+
+  list.innerHTML = projects.map(p => {
+    const done = p.todos.filter(t => t.done).length;
+    const total = p.todos.length || 1;
+    const pct = Math.round(done / total * 100);
+    const col = getColor(p.color);
+    const isActive = currentProjId === p.id && currentPage === 'project';
+    return `<div class="nav-item ${isActive ? 'active' : ''}"
+      draggable="true"
+      data-id="${p.id}"
+      ondragstart="onDragStart(event,${p.id})"
+      ondragover="onDragOver(event)"
+      ondragleave="onDragLeave(event)"
+      ondrop="onDrop(event,${p.id})"
+      ondragend="onDragEnd(event)"
+      onclick="showProject(${p.id})">
+      <span class="drag-handle" onclick="event.stopPropagation()" title="ドラッグして並び替え">⠿</span>
+      <span class="nav-dot" style="background:${col.hex}"></span>
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.name}</span>
+      <span class="nav-progress">${pct}%</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('nav-new').className = 'nav-item' + (currentPage === 'new' ? ' active' : '');
+}
+
+function onDragStart(e, id) {
+  dragSrcId = id;
+  e.dataTransfer.effectAllowed = 'move';
+  setTimeout(() => e.target.classList.add('dragging'), 0);
+}
+
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  const item = e.currentTarget;
+  document.querySelectorAll('.nav-item[data-id]').forEach(el => el.classList.remove('drag-over'));
+  if (parseInt(item.dataset.id) !== dragSrcId) item.classList.add('drag-over');
+}
+
+function onDragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+
+function onDrop(e, targetId) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (dragSrcId === targetId) return;
+  const srcIdx = projects.findIndex(p => p.id === dragSrcId);
+  const tgtIdx = projects.findIndex(p => p.id === targetId);
+  const [moved] = projects.splice(srcIdx, 1);
+  projects.splice(tgtIdx, 0, moved);
+  save();
+  renderSidebar();
+}
+
+function onDragEnd(e) {
+  e.target.classList.remove('dragging');
+  document.querySelectorAll('.nav-item[data-id]').forEach(el => el.classList.remove('drag-over'));
+  dragSrcId = null;
+}
+
+// ---- Pages ----
+function showPage(page, projId) {
+  currentPage = page;
+  currentProjId = projId || null;
+  renderSidebar();
+
+  const main = document.getElementById('main-area');
+  if (page === 'new') {
+    main.innerHTML = renderNewPage();
+  } else if (page === 'project') {
+    main.innerHTML = renderProjectPage(projId);
+  }
+}
+
+function showProject(id) {
+  showPage('project', id);
+}
+
+// ---- New Project Page ----
+function renderNewPage() {
+  const colorOpts = COLORS.map((c, i) =>
+    `<span class="color-opt ${i === 4 ? 'selected' : ''}"
+      style="background:${c.hex}"
+      onclick="selectColor('${c.id}', this)"
+      data-color="${c.id}"
+      title="${c.label}"></span>`
+  ).join('');
+
+  return `
+  <div class="page-header">
+    <div class="page-title">新しいプロジェクト</div>
+  </div>
+  <div class="card">
+    <div class="form-grid">
+      <div class="form-field full">
+        <label>制作したいもの</label>
+        <input type="text" id="new-name" placeholder="例: イラスト集、短編動画、Webサイト..." maxlength="40">
+      </div>
+      <div class="form-field full">
+        <label>メモ・概要</label>
+        <textarea id="new-desc" placeholder="テーマ、スタイル、参考にしたいもの...なんでも"></textarea>
+      </div>
+      <div class="form-field">
+        <label>想定期間</label>
+        <select id="new-period">
+          <option>1週間</option>
+          <option>2〜3週間</option>
+          <option>1ヶ月</option>
+          <option>2〜3ヶ月</option>
+          <option>半年以上</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>進める頻度</label>
+        <select id="new-freq">
+          <option>毎日少しずつ</option>
+          <option>週2〜3回</option>
+          <option>週末だけ</option>
+          <option>気が向いたとき</option>
+        </select>
+      </div>
+      <div class="form-field full">
+        <label>テーマカラー</label>
+        <div class="color-options" id="color-opts">${colorOpts}</div>
+        <input type="hidden" id="new-color" value="sky">
+      </div>
+      <div class="form-field full">
+        <label>工程（1行に1つ、あとで追加もできます）</label>
+        <textarea id="new-steps" placeholder="リサーチ&#10;ラフ作成&#10;素材集め&#10;制作&#10;チェック&#10;公開" style="min-height:110px"></textarea>
+      </div>
+    </div>
+    <button class="btn btn-accent" onclick="createProject()" style="width:100%;justify-content:center;padding:10px">作成する →</button>
+  </div>`;
+}
+
+function selectColor(id, el) {
+  document.querySelectorAll('.color-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('new-color').value = id;
+}
+
+function createProject() {
+  const name = document.getElementById('new-name').value.trim();
+  if (!name) { alert('プロジェクト名を入力してください'); return; }
+  const stepsRaw = document.getElementById('new-steps').value.trim();
+  const steps = stepsRaw ? stepsRaw.split('\n').map(s => s.trim()).filter(s => s) : [];
+  const todos = steps.map((s, i) => ({ id: i + 1, text: s, done: false }));
+  const proj = {
+    id: Date.now(),
+    name,
+    desc: document.getElementById('new-desc').value,
+    period: document.getElementById('new-period').value,
+    freq: document.getElementById('new-freq').value,
+    color: document.getElementById('new-color').value,
+    todos,
+    nextId: todos.length + 1,
+    createdAt: new Date().toLocaleDateString('ja-JP')
+  };
+  projects.push(proj);
+  save();
+  showProject(proj.id);
+}
+
+// ---- Project Page ----
+function renderProjectPage(id) {
+  const p = projects.find(p => p.id === id);
+  if (!p) return '<div class="empty">プロジェクトが見つかりません</div>';
+  const col = getColor(p.color);
+  const done = p.todos.filter(t => t.done).length;
+  const total = p.todos.length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+
+  // Ring
+  const r = 40, circ = 2 * Math.PI * r;
+  const offset = circ - (pct / 100) * circ;
+
+  // Dots
+  const seg = 20;
+  const filled = Math.round(pct / 100 * seg);
+  const dots = Array.from({length: seg}, (_, i) =>
+    `<div class="dot" style="background:${i < filled ? col.hex : 'var(--surface2)'}"></div>`
+  ).join('');
+
+  // Todos
+  const todoItems = p.todos.map(t => `
+    <div class="todo-item" id="todo-${t.id}">
+      <input type="checkbox" class="todo-check" ${t.done ? 'checked' : ''}
+        style="${t.done ? `background:${col.hex}` : ''}"
+        onchange="toggleTodo(${p.id}, ${t.id}, this)">
+      <div class="todo-text ${t.done ? 'done' : ''}" id="todo-text-${t.id}">${escHtml(t.text)}</div>
+      <button class="btn-ghost" onclick="deleteTodo(${p.id}, ${t.id})" title="削除">✕</button>
+    </div>
+  `).join('');
+
+  return `
+  <div class="page-header">
+    <div style="flex:1;min-width:0">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="page-title" id="proj-title-display" style="cursor:text" onclick="startEditName(${p.id})" title="クリックして編集">${escHtml(p.name)}</div>
+        <button class="btn-ghost" onclick="startEditName(${p.id})" title="名前を編集" style="font-size:12px;padding:3px 6px;color:var(--text3)">✏️</button>
+      </div>
+      <div style="font-size:13px;color:var(--text3);margin-top:3px">${p.period} · ${p.freq} · ${p.createdAt}</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <button class="btn btn-sm" onclick="editColor(${p.id})">色を変更</button>
+      <button class="btn btn-sm" style="color:#c0392b;border-color:rgba(192,57,43,0.3)" onclick="deleteProject(${p.id})">削除</button>
+    </div>
+  </div>
+
+  <div class="accent-bar" style="background:${col.hex}"></div>
+
+  <div class="progress-ring-wrap">
+    <svg width="100" height="100" class="ring-svg">
+      <circle class="ring-track" cx="50" cy="50" r="${r}"/>
+      <circle class="ring-fill" cx="50" cy="50" r="${r}"
+        stroke="${col.hex}"
+        stroke-dasharray="${circ}"
+        stroke-dashoffset="${offset}"/>
+      <text x="50" y="50" class="ring-label" fill="var(--text)"
+        style="font-size:16px;font-weight:500;font-family:var(--font);transform:rotate(90deg);transform-origin:50px 50px">
+        ${pct}%
+      </text>
+    </svg>
+    <div>
+      <div class="stats-row" style="margin-bottom:0.5rem">
+        <div class="stat-box">
+          <div class="stat-num">${done}</div>
+          <div class="stat-lbl">完了</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">${total - done}</div>
+          <div class="stat-lbl">残り</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">${total}</div>
+          <div class="stat-lbl">合計</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dots-row">${dots}</div>
+
+  <div class="card" style="cursor:text" onclick="startEditDesc(${p.id})" title="クリックして編集">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+      <div id="proj-desc-display" style="font-size:13px;color:${p.desc ? 'var(--text2)' : 'var(--text3)'};line-height:1.7;flex:1">${p.desc ? escHtml(p.desc) : 'メモ・概要（クリックして追加）'}</div>
+      <button class="btn-ghost" onclick="event.stopPropagation();startEditDesc(${p.id})" style="font-size:12px;flex-shrink:0;color:var(--text3)">✏️</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:13px;font-weight:500;margin-bottom:10px;color:var(--text2)">Todo</div>
+    ${todoItems || '<div style="color:var(--text3);font-size:13px;padding:8px 0">下から追加しよう</div>'}
+    <div class="add-row">
+      <input type="text" id="new-todo-input" placeholder="新しいTodoを追加..."
+        onkeydown="if(event.key==='Enter')addTodo(${p.id})">
+      <button class="btn btn-accent" style="--accent:${col.hex};white-space:nowrap" onclick="addTodo(${p.id})">追加</button>
+    </div>
+  </div>`;
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toggleTodo(projId, todoId, el) {
+  const p = projects.find(p => p.id === projId);
+  const t = p.todos.find(t => t.id === todoId);
+  t.done = el.checked;
+  const col = getColor(p.color);
+  el.style.background = t.done ? col.hex : '';
+  document.getElementById('todo-text-' + todoId).className = 'todo-text' + (t.done ? ' done' : '');
+  save();
+  // Re-render ring + dots
+  const done = p.todos.filter(t => t.done).length;
+  const total = p.todos.length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  const r = 40, circ = 2 * Math.PI * r;
+  const offset = circ - (pct / 100) * circ;
+  const ring = document.querySelector('.ring-fill');
+  if (ring) { ring.style.strokeDashoffset = offset; }
+  const ringText = document.querySelector('.ring-label');
+  if (ringText) ringText.textContent = pct + '%';
+  const seg = 20, filled = Math.round(pct / 100 * seg);
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.style.background = i < filled ? col.hex : 'var(--surface2)';
+  });
+  document.querySelectorAll('.stat-num').forEach((s, i) => {
+    if (i === 0) s.textContent = done;
+    if (i === 1) s.textContent = total - done;
+    if (i === 2) s.textContent = total;
+  });
+  renderSidebar();
+}
+
+function addTodo(projId) {
+  const input = document.getElementById('new-todo-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const p = projects.find(p => p.id === projId);
+  const todo = { id: p.nextId++, text, done: false };
+  p.todos.push(todo);
+  save();
+  input.value = '';
+  showProject(projId);
+}
+
+function deleteTodo(projId, todoId) {
+  const p = projects.find(p => p.id === projId);
+  p.todos = p.todos.filter(t => t.id !== todoId);
+  save();
+  showProject(projId);
+}
+
+function deleteProject(id) {
+  if (!confirm('このプロジェクトを削除しますか？')) return;
+  projects = projects.filter(p => p.id !== id);
+  save();
+  currentProjId = null;
+  showPage('new');
+}
+
+function editColor(projId) {
+  const p = projects.find(p => p.id === projId);
+  const opts = COLORS.map(c =>
+    `<span class="color-opt ${p.color === c.id ? 'selected' : ''}"
+      style="background:${c.hex};display:inline-block;width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid ${p.color === c.id ? '#000' : 'transparent'};margin:4px"
+      onclick="changeColor(${projId},'${c.id}',this)" title="${c.label}"></span>`
+  ).join('');
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;z-index:999';
+  overlay.innerHTML = `
+    <div style="background:var(--surface);border-radius:var(--radius);padding:1.5rem;min-width:260px;box-shadow:0 8px 32px rgba(0,0,0,0.2)">
+      <div style="font-size:15px;font-weight:500;margin-bottom:1rem">テーマカラーを変更</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:1rem">${opts}</div>
+      <button class="btn" onclick="document.getElementById('color-overlay').remove()" style="width:100%;justify-content:center">閉じる</button>
+    </div>`;
+  overlay.id = 'color-overlay';
+  overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+  document.body.appendChild(overlay);
+}
+
+function startEditName(projId) {
+  const p = projects.find(p => p.id === projId);
+  const display = document.getElementById('proj-title-display');
+  if (!display) return;
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.value = p.name;
+  input.maxLength = 40;
+  input.style.cssText = 'font-size:20px;font-weight:500;padding:2px 8px;width:100%;max-width:340px';
+  input.onblur = () => saveEditName(projId, input.value);
+  input.onkeydown = e => { if (e.key === 'Enter') input.blur(); if (e.key === 'Escape') { input.value = p.name; input.blur(); } };
+  display.replaceWith(input);
+  input.focus(); input.select();
+}
+
+function saveEditName(projId, val) {
+  const p = projects.find(p => p.id === projId);
+  const trimmed = val.trim();
+  if (trimmed) p.name = trimmed;
+  save();
+  renderSidebar();
+  const input = document.querySelector('input[type="text"][maxlength="40"]');
+  if (input) {
+    const newEl = document.createElement('div');
+    newEl.className = 'page-title';
+    newEl.id = 'proj-title-display';
+    newEl.style.cursor = 'text';
+    newEl.title = 'クリックして編集';
+    newEl.onclick = () => startEditName(projId);
+    newEl.textContent = p.name;
+    input.replaceWith(newEl);
+  }
+}
+
+function startEditDesc(projId) {
+  const p = projects.find(p => p.id === projId);
+  const display = document.getElementById('proj-desc-display');
+  if (!display) return;
+  const ta = document.createElement('textarea');
+  ta.value = p.desc || '';
+  ta.placeholder = 'メモ・概要...';
+  ta.style.cssText = 'font-size:13px;width:100%;min-height:80px;line-height:1.7';
+  ta.onblur = () => saveEditDesc(projId, ta.value);
+  ta.onkeydown = e => { if (e.key === 'Escape') { ta.value = p.desc || ''; ta.blur(); } };
+  display.replaceWith(ta);
+  ta.focus();
+}
+
+function saveEditDesc(projId, val) {
+  const p = projects.find(p => p.id === projId);
+  p.desc = val.trim();
+  save();
+  const ta = document.querySelector('textarea:not(#new-desc):not(#new-steps):not(#proj-steps)');
+  if (ta && ta.parentElement && ta.parentElement.classList.contains('card')) {
+    const newEl = document.createElement('div');
+    newEl.id = 'proj-desc-display';
+    newEl.style.cssText = `font-size:13px;color:${p.desc ? 'var(--text2)' : 'var(--text3)'};line-height:1.7;flex:1`;
+    newEl.textContent = p.desc || 'メモ・概要（クリックして追加）';
+    ta.replaceWith(newEl);
+  }
+}
+
+function changeColor(projId, colorId, el) {
+  const p = projects.find(p => p.id === projId);
+  p.color = colorId;
+  save();
+  document.getElementById('color-overlay').remove();
+  showProject(projId);
+}
+
+// Init
+showPage('new');
+</script>
+</body>
+</html>
