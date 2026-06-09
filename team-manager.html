@@ -586,68 +586,6 @@
 </head>
 <body>
 
-<!-- ===================== セットアップ画面 ===================== -->
-<div id="setup-screen" class="hidden">
-  <div class="setup-card">
-    <h1>🛠 初回セットアップ</h1>
-    <p class="subtitle">このアプリを使うには、Googleスプレッドシートと連携する必要があります。<br>以下の手順に従って設定してください（5〜10分）</p>
-
-    <div class="setup-steps">
-
-      <div class="setup-step">
-        <div class="step-num">1</div>
-        <div class="step-content">
-          <p>Googleスプレッドシートを新規作成する</p>
-          <small>
-            <a href="https://sheets.new" target="_blank" style="color:var(--accent)">sheets.new</a> を開いて「空白のスプレッドシート」を作成してください。<br>
-            名前は何でもOKです。
-          </small>
-        </div>
-      </div>
-
-      <div class="setup-step">
-        <div class="step-num">2</div>
-        <div class="step-content">
-          <p>Apps Script にコードを貼り付ける</p>
-          <small>
-            スプレッドシートの「拡張機能」→「Apps Script」を開き、<br>
-            エディタの中身を全部削除して下のコードを貼り付けて保存（Command+S）。
-          </small>
-          <div style="position:relative">
-            <div class="code-block" id="gas-code-display"></div>
-            <button class="copy-btn" onclick="copyGasCode()">コピー</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="setup-step">
-        <div class="step-num">3</div>
-        <div class="step-content">
-          <p>ウェブアプリとしてデプロイする</p>
-          <small>
-            Apps Script の画面で「デプロイ」→「新しいデプロイ」をクリック。<br>
-            「種類の選択」→「<strong>ウェブアプリ</strong>」を選択。<br>
-            「アクセスできるユーザー」を「<strong>全員</strong>」に変更して「デプロイ」。<br>
-            表示された <strong>ウェブアプリのURL</strong> をコピーしてください。
-          </small>
-        </div>
-      </div>
-
-    </div>
-
-    <hr class="setup-divider">
-
-    <div class="setup-url-section">
-      <div class="form-group">
-        <label>コピーしたURLをここに貼り付ける</label>
-        <input id="setup-gas-url" type="url" placeholder="https://script.google.com/macros/s/.../exec">
-      </div>
-      <button class="btn-primary" style="width:100%;margin-top:4px" onclick="saveGasUrl()">保存してはじめる</button>
-      <p class="error-msg" id="setup-error"></p>
-    </div>
-  </div>
-</div>
-
 <!-- ===================== ログイン画面 ===================== -->
 <div id="login-screen" class="hidden">
   <div class="login-card">
@@ -655,10 +593,11 @@
     <p class="subtitle">ワークスペースにアクセス</p>
 
     <div class="login-tabs">
-      <button class="tab-btn active" id="tab-login"   onclick="switchTab('login')">入室</button>
-      <button class="tab-btn"        id="tab-create"  onclick="switchTab('create')">新規作成</button>
+      <button class="tab-btn active" id="tab-login"  onclick="switchTab('login')">入室</button>
+      <button class="tab-btn"        id="tab-create" onclick="switchTab('create')">新規作成</button>
     </div>
 
+    <!-- 入室フォーム -->
     <div id="form-login">
       <div class="form-group">
         <label>ワークスペース名</label>
@@ -668,21 +607,70 @@
         <label>パスワード</label>
         <input id="login-ws-pass" type="password" placeholder="パスワードを入力">
       </div>
+      <div class="form-group">
+        <label>GAS URL <span style="font-weight:400;color:var(--muted)">（管理者から共有されたURL）</span></label>
+        <input id="login-gas-url" type="url" placeholder="https://script.google.com/macros/s/.../exec">
+      </div>
       <button class="btn-primary" style="width:100%;margin-top:4px" onclick="doLogin()" id="btn-login">入室する</button>
       <p class="error-msg" id="login-error"></p>
     </div>
 
+    <!-- 新規作成フォーム（セットアップ込み） -->
     <div id="form-create" class="hidden">
-      <div class="form-group">
-        <label>ワークスペース名</label>
-        <input id="create-ws-name" type="text" placeholder="例: ◯◯デザイン事務所" autocomplete="off">
+
+      <!-- ステップ表示 -->
+      <div id="create-step-1">
+        <div class="setup-steps" style="margin-bottom:20px">
+          <div class="setup-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <p>Googleスプレッドシートを新規作成する</p>
+              <small><a href="https://sheets.new" target="_blank" style="color:var(--accent)">sheets.new</a> を開いて「空白のスプレッドシート」を作成。名前は何でもOK。</small>
+            </div>
+          </div>
+          <div class="setup-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <p>Apps Script にコードを貼り付ける</p>
+              <small>「拡張機能」→「Apps Script」を開き、中身を全部削除して下のコードを貼り付けて保存。</small>
+              <div style="position:relative;margin-top:8px">
+                <div class="code-block" id="gas-code-display"></div>
+                <button class="copy-btn" onclick="copyGasCode()">コピー</button>
+              </div>
+            </div>
+          </div>
+          <div class="setup-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <p>ウェブアプリとしてデプロイする</p>
+              <small>「デプロイ」→「新しいデプロイ」→「ウェブアプリ」を選択。<br>「アクセスできるユーザー」を「<strong>全員</strong>」にして「デプロイ」。<br>表示された<strong>ウェブアプリのURL</strong>をコピー。</small>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>コピーしたURLを貼り付ける</label>
+          <input id="create-gas-url" type="url" placeholder="https://script.google.com/macros/s/.../exec">
+        </div>
+        <button class="btn-primary" style="width:100%;margin-top:4px" onclick="goToStep2()">次へ →</button>
+        <p class="error-msg" id="step1-error"></p>
       </div>
-      <div class="form-group">
-        <label>パスワード（メンバーに共有）</label>
-        <input id="create-ws-pass" type="password" placeholder="パスワードを設定">
+
+      <div id="create-step-2" class="hidden">
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px">✅ 接続OK！ワークスペースを作成します。</p>
+        <div class="form-group">
+          <label>ワークスペース名</label>
+          <input id="create-ws-name" type="text" placeholder="例: ◯◯デザイン事務所" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>パスワード（メンバーに共有）</label>
+          <input id="create-ws-pass" type="password" placeholder="パスワードを設定">
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">メンバーには「ワークスペース名・パスワード・GAS URL」の3つを共有してください。</p>
+        <button class="btn-primary" style="width:100%;margin-top:4px" onclick="doCreate()" id="btn-create">作成して入室</button>
+        <button class="btn-ghost" style="width:100%;margin-top:6px" onclick="backToStep1()">← 戻る</button>
+        <p class="error-msg" id="create-error"></p>
       </div>
-      <button class="btn-primary" style="width:100%;margin-top:4px" onclick="doCreate()" id="btn-create">作成して入室</button>
-      <p class="error-msg" id="create-error"></p>
+
     </div>
   </div>
 </div>
@@ -975,20 +963,16 @@ function json(d) { return ContentService.createTextOutput(JSON.stringify(d)).set
 
 window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("gas-code-display").textContent = GAS_CODE_TEXT;
-  if (!GAS_URL) {
-    document.getElementById("setup-screen").classList.remove("hidden");
-  } else {
-    document.getElementById("login-screen").classList.remove("hidden");
-  }
+  document.getElementById("login-screen").classList.remove("hidden");
 });
 
 function copyGasCode() {
   navigator.clipboard.writeText(GAS_CODE_TEXT).then(() => toast("コードをコピーしました"));
 }
 
-async function saveGasUrl() {
-  const url   = document.getElementById("setup-gas-url").value.trim();
-  const errEl = document.getElementById("setup-error");
+async function goToStep2() {
+  const url   = document.getElementById("create-gas-url").value.trim();
+  const errEl = document.getElementById("step1-error");
   errEl.textContent = "";
 
   if (!url.startsWith("https://script.google.com")) {
@@ -1001,21 +985,23 @@ async function saveGasUrl() {
   btn.innerHTML = '<span class="spinner"></span> 接続確認中...';
 
   try {
-    // 接続テスト（unknownアクションを投げてok:falseが返れば接続OK）
-    const res  = await fetch(url, { method:"POST", body: JSON.stringify({ action:"__ping__", data:{} }) });
-    const json = await res.json();
-    // ok:false でも json が返ってくれば接続成功
+    const res = await fetch(url, { method:"POST", body: JSON.stringify({ action:"__ping__", data:{} }) });
+    await res.json();
     GAS_URL = url;
     localStorage.setItem("team_manager_gas_url", url);
-    document.getElementById("setup-screen").classList.add("hidden");
-    document.getElementById("login-screen").classList.remove("hidden");
-    toast("接続できました！");
+    document.getElementById("create-step-1").classList.add("hidden");
+    document.getElementById("create-step-2").classList.remove("hidden");
   } catch(e) {
     errEl.textContent = "URLに接続できませんでした。デプロイのURLが正しいか確認してください。";
   } finally {
     btn.disabled = false;
-    btn.textContent = "保存してはじめる";
+    btn.textContent = "次へ →";
   }
+}
+
+function backToStep1() {
+  document.getElementById("create-step-2").classList.add("hidden");
+  document.getElementById("create-step-1").classList.remove("hidden");
 }
 
 // ============================================================
@@ -1029,13 +1015,19 @@ function switchTab(tab) {
 }
 
 async function doLogin() {
-  const name = document.getElementById("login-ws-name").value.trim();
-  const pass = document.getElementById("login-ws-pass").value;
-  const errEl = document.getElementById("login-error");
-  const btn   = document.getElementById("btn-login");
+  const name   = document.getElementById("login-ws-name").value.trim();
+  const pass   = document.getElementById("login-ws-pass").value;
+  const gasUrl = document.getElementById("login-gas-url").value.trim();
+  const errEl  = document.getElementById("login-error");
+  const btn    = document.getElementById("btn-login");
 
   errEl.textContent = "";
   if (!name || !pass) { errEl.textContent = "名前とパスワードを入力してください"; return; }
+  if (!gasUrl) { errEl.textContent = "GAS URLを入力してください（管理者に確認してください）"; return; }
+
+  // GAS URLをセット
+  GAS_URL = gasUrl;
+  localStorage.setItem("team_manager_gas_url", gasUrl);
 
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>';
