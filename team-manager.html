@@ -607,10 +607,6 @@
         <label>パスワード</label>
         <input id="login-ws-pass" type="password" placeholder="パスワードを入力">
       </div>
-      <div class="form-group">
-        <label>GAS URL <span style="font-weight:400;color:var(--muted)">（管理者から共有されたURL）</span></label>
-        <input id="login-gas-url" type="url" placeholder="https://script.google.com/macros/s/.../exec">
-      </div>
       <button class="btn-primary" style="width:100%;margin-top:4px" onclick="doLogin()" id="btn-login">入室する</button>
       <p class="error-msg" id="login-error"></p>
     </div>
@@ -656,7 +652,7 @@
       </div>
 
       <div id="create-step-2" class="hidden">
-        <p style="font-size:13px;color:var(--muted);margin-bottom:16px">✅ 接続OK！ワークスペースを作成します。</p>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px">✅ 接続OK！ワークスペースを作成します。<br>作成後にメンバー招待用のURLが発行されます。</p>
         <div class="form-group">
           <label>ワークスペース名</label>
           <input id="create-ws-name" type="text" placeholder="例: ◯◯デザイン事務所" autocomplete="off">
@@ -791,6 +787,25 @@
       <button class="btn-danger"    onclick="deleteTaskConfirm()">削除</button>
       <button class="btn-secondary" onclick="closeModal('modal-task')">キャンセル</button>
       <button class="btn-primary"   onclick="saveTask()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== モーダル: 招待URL ===================== -->
+<div class="modal-overlay hidden" id="modal-invite">
+  <div class="modal">
+    <h2>🎉 ワークスペースを作成しました</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">
+      メンバーにこのURLを共有してください。<br>
+      URLを開くとワークスペース名とパスワードだけで入室できます。
+    </p>
+    <div class="form-group">
+      <label>招待URL</label>
+      <input id="invite-url-text" type="text" readonly onclick="this.select()" style="font-size:12px;cursor:pointer">
+    </div>
+    <button class="btn-primary" style="width:100%;margin-top:4px" onclick="copyInviteUrl()">URLをコピー</button>
+    <div class="modal-actions" style="margin-top:10px">
+      <button class="btn-secondary" onclick="closeModal('modal-invite')">閉じる</button>
     </div>
   </div>
 </div>
@@ -963,6 +978,15 @@ function json(d) { return ContentService.createTextOutput(JSON.stringify(d)).set
 
 window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("gas-code-display").textContent = GAS_CODE_TEXT;
+
+  // URLパラメーターにGAS URLが含まれていれば自動セット
+  const params = new URLSearchParams(window.location.search);
+  const gasParam = params.get("gas");
+  if (gasParam) {
+    GAS_URL = gasParam;
+    localStorage.setItem("team_manager_gas_url", gasParam);
+  }
+
   document.getElementById("login-screen").classList.remove("hidden");
 });
 
@@ -1015,19 +1039,14 @@ function switchTab(tab) {
 }
 
 async function doLogin() {
-  const name   = document.getElementById("login-ws-name").value.trim();
-  const pass   = document.getElementById("login-ws-pass").value;
-  const gasUrl = document.getElementById("login-gas-url").value.trim();
-  const errEl  = document.getElementById("login-error");
-  const btn    = document.getElementById("btn-login");
+  const name  = document.getElementById("login-ws-name").value.trim();
+  const pass  = document.getElementById("login-ws-pass").value;
+  const errEl = document.getElementById("login-error");
+  const btn   = document.getElementById("btn-login");
 
   errEl.textContent = "";
   if (!name || !pass) { errEl.textContent = "名前とパスワードを入力してください"; return; }
-  if (!gasUrl) { errEl.textContent = "GAS URLを入力してください（管理者に確認してください）"; return; }
-
-  // GAS URLをセット
-  GAS_URL = gasUrl;
-  localStorage.setItem("team_manager_gas_url", gasUrl);
+  if (!GAS_URL) { errEl.textContent = "管理者から共有されたURLで開いてください"; return; }
 
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>';
@@ -1043,8 +1062,8 @@ async function doLogin() {
 }
 
 async function doCreate() {
-  const name = document.getElementById("create-ws-name").value.trim();
-  const pass = document.getElementById("create-ws-pass").value;
+  const name  = document.getElementById("create-ws-name").value.trim();
+  const pass  = document.getElementById("create-ws-pass").value;
   const errEl = document.getElementById("create-error");
   const btn   = document.getElementById("btn-create");
 
@@ -1056,6 +1075,10 @@ async function doCreate() {
   btn.innerHTML = '<span class="spinner"></span>';
   try {
     await api("createWorkspace", { name, password: pass });
+    // 招待URL表示
+    const inviteUrl = `${location.origin}${location.pathname}?gas=${encodeURIComponent(GAS_URL)}`;
+    document.getElementById("invite-url-text").value = inviteUrl;
+    document.getElementById("modal-invite").classList.remove("hidden");
     await enterWorkspace(name);
   } catch (e) {
     errEl.textContent = e.message;
@@ -1433,6 +1456,11 @@ async function deleteTaskConfirm() {
 // ============================================================
 // モーダル・ユーティリティ
 // ============================================================
+function copyInviteUrl() {
+  const url = document.getElementById("invite-url-text").value;
+  navigator.clipboard.writeText(url).then(() => toast("招待URLをコピーしました"));
+}
+
 function openMemberModal() {
   renderMemberModal();
   document.getElementById("modal-member").classList.remove("hidden");
