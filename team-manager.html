@@ -683,6 +683,10 @@
     <p class="sidebar-section-title">プロジェクト</p>
     <div class="project-list" id="project-list"></div>
     <div class="sidebar-bottom">
+      <div style="display:flex;gap:6px;padding:4px 4px 8px;border-bottom:1px solid var(--border);margin-bottom:4px">
+        <input id="sidebar-invite-url" type="text" readonly onclick="this.select()" placeholder="招待URL" style="font-size:11px;cursor:pointer;padding:7px 10px">
+        <button class="btn-icon" onclick="copySidebarInviteUrl()" title="招待URLをコピー" style="border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:13px">🔗</button>
+      </div>
       <button class="btn-ghost" onclick="openProjectModal()">＋ プロジェクト追加</button>
       <button class="btn-ghost" onclick="openMemberModal()">👥 メンバー管理</button>
       <button class="btn-ghost" onclick="doLogout()">← ログアウト</button>
@@ -1100,6 +1104,8 @@ async function enterWorkspace(wsName) {
   document.getElementById("ws-name-display").textContent = wsName;
   document.getElementById("login-screen").classList.add("hidden");
   document.getElementById("app-screen").classList.remove("hidden");
+  const inviteUrl = `${location.origin}${location.pathname}?gas=${encodeURIComponent(GAS_URL)}`;
+  document.getElementById("sidebar-invite-url").value = inviteUrl;
 
   await Promise.all([loadMembers(), loadProjects(), loadStats()]);
 }
@@ -1463,6 +1469,10 @@ async function deleteTaskConfirm() {
 // ============================================================
 // モーダル・ユーティリティ
 // ============================================================
+function copySidebarInviteUrl() {
+  copyInviteUrl("sidebar-invite-url");
+}
+
 function copyInviteUrl(inputId = "invite-url-text") {
   const url = document.getElementById(inputId).value;
   navigator.clipboard.writeText(url).then(() => toast("招待URLをコピーしました"));
