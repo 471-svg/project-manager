@@ -6,11 +6,11 @@
 <title>チーム制作管理ツール — 無料・登録不要</title>
 <style>
   :root {
-    --bg      : #0d0f14;
-    --surface : #161920;
-    --surface2: #1e2230;
-    --border  : rgba(255,255,255,.08);
-    --text    : #f0f1f5;
+    --bg      : #f7f8fc;
+    --surface : #ffffff;
+    --surface2: #f0f2f8;
+    --border  : rgba(0,0,0,.08);
+    --text    : #1a1c2e;
     --muted   : #7b8299;
     --accent  : #4f8ef7;
     --accent2 : #34c77b;
@@ -40,7 +40,7 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(13,15,20,.92);
+    background: rgba(255,255,255,.92);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
   }
@@ -559,8 +559,8 @@
 
     <!-- モックアップ -->
     <div class="hero-mockup">
-      <!-- <img src="images/mockup-hero.png" alt="チーム制作管理ツール"> -->
-      <div class="hero-mockup-placeholder">📸 images/mockup-hero.png（PC＋スマホのモックアップ）</div>
+      <img src="images/mockup-hero.png" alt="チーム制作管理ツール" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="hero-mockup-placeholder" style="display:none">📸 images/mockup-hero.png</div>
       <div class="hero-badge-float right">
         <div class="pct-ring"><span>67%</span></div>
         <span>LP制作<br><span style="font-size:10px;color:#7b8299;font-weight:400">残り1タスク</span></span>
@@ -661,8 +661,7 @@
           <p>複数のプロジェクトを同時に抱えていても、サイドバーに進捗%と残りタスク数が表示されるので全体把握が簡単です。どの案件が遅れているか、一目でわかります。</p>
         </div>
         <div class="split-img">
-          <!-- <img src="images/mockup-sidebar.png" alt="サイドバー進捗表示"> -->
-          <div class="img-placeholder">📸 images/mockup-sidebar.png</div>
+          <img src="images/mockup-sidebar.png" alt="サイドバー進捗表示" onerror="this.style.display='none'">
         </div>
       </div>
 
@@ -672,8 +671,7 @@
           <p>メンバーの名前をタップするだけで自分のタスクだけに絞れます。毎日の「今日やること」確認がスムーズ。チーム全員・自分だけ、いつでも切り替えられます。</p>
         </div>
         <div class="split-img">
-          <!-- <img src="images/mockup-filter.png" alt="担当者フィルター"> -->
-          <div class="img-placeholder">📸 images/mockup-filter.png</div>
+          <img src="images/mockup-filter.png" alt="担当者フィルター" onerror="this.style.display='none'">
         </div>
       </div>
 
@@ -683,8 +681,7 @@
           <p>チェックを入れるたびに進捗リングがぐるっと進みます。「あとどれくらいか」が視覚的に伝わるので、チームのモチベーション維持にも効果的です。</p>
         </div>
         <div class="split-img">
-          <!-- <img src="images/mockup-tasks.png" alt="タスク進捗リング"> -->
-          <div class="img-placeholder">📸 images/mockup-tasks.png</div>
+          <img src="images/mockup-tasks.png" alt="タスク進捗リング" onerror="this.style.display='none'">
         </div>
       </div>
     </div>
@@ -692,7 +689,7 @@
 </section>
 
 <!-- 差別化ポイント -->
-<section class="section" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+<section class="section" style="background:var(--surface2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
   <div class="container">
     <span class="section-label">他のツールとの違い</span>
     <h2 class="section-title">シンプルだから、続けられる。</h2>
@@ -750,76 +747,114 @@
 <section class="section">
   <div class="container">
     <span class="section-label">使い方</span>
-    <h2 class="section-title">セットアップは<br>5ステップで完了。</h2>
+    <h2 class="section-title">セットアップは<br>8ステップで完了。</h2>
     <p class="section-lead" style="margin-bottom:0">管理者が1回だけ設定すれば、あとはメンバーが招待URLを開いてパスワードを入れるだけ。難しい操作は一切ありません。</p>
 
     <div class="steps">
+
       <div class="step-item">
-        <div class="step-left">
-          <div class="step-num">1</div>
-          <div class="step-line"></div>
-        </div>
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
         <div class="step-content">
-          <h3>HTMLファイルをダウンロード</h3>
-          <p>このページの「ダウンロード」ボタンを押して、HTMLファイルを保存します。ダウンロードしたファイルをブラウザで開けばアプリが起動します。インストールは不要です。</p>
+          <h3>HTMLファイルをダウンロードしてブラウザで開く</h3>
+          <p>このページの「ダウンロード」ボタンを押してHTMLファイルを保存し、ブラウザで開きます。「新規作成」タブを選択してセットアップを開始してください。</p>
         </div>
       </div>
 
       <div class="step-item">
-        <div class="step-left">
-          <div class="step-num">2</div>
-          <div class="step-line"></div>
-        </div>
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
         <div class="step-content">
-          <h3>Googleスプレッドシートを作成</h3>
-          <p><a href="https://sheets.new" target="_blank">sheets.new</a> を開いて新しいスプレッドシートを作成します。このスプレッドシートがデータの保存場所になります。名前は何でもOKです。</p>
-        </div>
-      </div>
-
-      <div class="step-item">
-        <div class="step-left">
-          <div class="step-num">3</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-content">
-          <h3>Apps Scriptにコードを貼り付ける</h3>
-          <p>スプレッドシートのメニューから「拡張機能 → Apps Script」を開きます。アプリのセットアップ画面に表示されるコードをコピーして貼り付け、保存するだけ。プログラミングの知識は不要です。</p>
+          <h3>Googleスプレッドシートを新規作成する</h3>
+          <p><a href="https://sheets.new" target="_blank">sheets.new</a> を開いて新しいスプレッドシートを作成します。名前は何でもOK。これがデータの保存場所になります。</p>
           <div class="step-img">
-            <!-- <img src="images/step-gas.png" alt="Apps Script セットアップ"> -->
-            <div class="img-placeholder">📸 images/step-gas.png（Apps Script画面）</div>
+            <img src="images/howtouse/step1-sheets-new.png" alt="Googleスプレッドシート新規作成" onerror="this.style.display='none'">
           </div>
         </div>
       </div>
 
       <div class="step-item">
-        <div class="step-left">
-          <div class="step-num">4</div>
-          <div class="step-line"></div>
-        </div>
+        <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
         <div class="step-content">
-          <h3>ウェブアプリとしてデプロイ</h3>
-          <p>「デプロイ → 新しいデプロイ → ウェブアプリ」を選択。アクセスを「全員」に設定してデプロイすると、アプリとスプレッドシートをつなぐURLが発行されます。</p>
+          <h3>「拡張機能」→「Apps Script」を開く</h3>
+          <p>スプレッドシートのメニューバーから「拡張機能」をクリックし、「Apps Script」を選択します。</p>
           <div class="step-img">
-            <!-- <img src="images/step-deploy.png" alt="デプロイ画面"> -->
-            <div class="img-placeholder">📸 images/step-deploy.png（デプロイ画面）</div>
+            <img src="images/howtouse/step2-apps-script-menu.png" alt="Apps Scriptメニュー" onerror="this.style.display='none'">
           </div>
         </div>
       </div>
 
       <div class="step-item">
-        <div class="step-left">
-          <div class="step-num">5</div>
-          <div class="step-line"></div>
-        </div>
+        <div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div>
         <div class="step-content">
-          <h3>ワークスペースを作成して招待URLを共有</h3>
-          <p>発行されたURLをアプリのセットアップ画面に貼り付け、ワークスペース名とパスワードを設定すれば完了。自動で生成される招待URLをチームメンバーに送れば、メンバーはパスワードを入れるだけで入室できます。</p>
+          <h3>コードをコピーして貼り付け・保存</h3>
+          <p>アプリのセットアップ画面に表示されているコードをコピーボタンで取得し、Apps Scriptのエディタに貼り付けて保存（Command+S）します。プログラミングの知識は不要です。</p>
           <div class="step-img">
-            <!-- <img src="images/step-setup.png" alt="セットアップ完了・招待URL"> -->
-            <div class="img-placeholder">📸 images/step-setup.png（招待URL画面）</div>
+            <img src="images/howtouse/step3-gas-code.png" alt="GASコード貼り付け" onerror="this.style.display='none'">
           </div>
         </div>
       </div>
+
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">5</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <h3>「デプロイ」→「新しいデプロイ」→「ウェブアプリ」を選択</h3>
+          <p>右上の「デプロイ」ボタンをクリックし「新しいデプロイ」を選択。種類の選択から「ウェブアプリ」を選びます。</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+            <div class="step-img" style="margin-top:0">
+              <img src="images/howtouse/step4-deploy-menu.png" alt="デプロイメニュー" onerror="this.style.display='none'">
+            </div>
+            <div class="step-img" style="margin-top:0">
+              <img src="images/howtouse/step5-deploy-webapp.png" alt="ウェブアプリ選択" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">6</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <h3>アクセスを「全員」に設定してデプロイ</h3>
+          <p>「アクセスできるユーザー」を「全員」に変更して「デプロイ」ボタンを押します。Googleの確認画面が表示されたら「Advanced」→「Go to (unsafe)」→「Continue」の順に進んでください。</p>
+          <div class="step-img">
+            <img src="images/howtouse/step6-deploy-settings.png" alt="デプロイ設定" onerror="this.style.display='none'">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+            <div class="step-img" style="margin-top:0">
+              <img src="images/howtouse/step8-warning.png" alt="Googleの警告画面" onerror="this.style.display='none'">
+            </div>
+            <div class="step-img" style="margin-top:0">
+              <img src="images/howtouse/step9-advanced.png" alt="Advanced画面" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">7</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <h3>発行されたURLをコピー</h3>
+          <p>デプロイが完了すると「ウェブアプリのURL」が発行されます。「コピー」ボタンでURLを取得してください。</p>
+          <div class="step-img">
+            <img src="images/howtouse/step11-url.png" alt="デプロイURL" onerror="this.style.display='none'">
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">8</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <h3>URLを貼り付けてワークスペースを作成</h3>
+          <p>アプリのセットアップ画面にURLを貼り付けて「次へ」。ワークスペース名とパスワードを設定すれば完了です。自動で発行される招待URLをメンバーに送れば、パスワードを入れるだけで入室できます。</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+            <div class="step-img" style="margin-top:0">
+              <img src="images/howtouse/step12-paste-url.png" alt="URL貼り付け" onerror="this.style.display='none'">
+            </div>
+            <div class="step-img" style="margin-top:0">
+              <img src="images/howtouse/step13-create-workspace.png" alt="ワークスペース作成" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div style="text-align:center;margin-top:56px">
