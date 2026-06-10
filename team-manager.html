@@ -1158,7 +1158,7 @@ function copyGasCode() {
   navigator.clipboard.writeText(GAS_CODE_TEXT).then(() => toast("コードをコピーしました"));
 }
 
-async function goToStep2() {
+function goToStep2() {
   const url   = document.getElementById("create-gas-url").value.trim();
   const errEl = document.getElementById("step1-error");
   errEl.textContent = "";
@@ -1168,23 +1168,10 @@ async function goToStep2() {
     return;
   }
 
-  const btn = event.target;
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> 接続確認中...';
-
-  try {
-    const res = await fetch(url, { method:"POST", body: JSON.stringify({ action:"__ping__", data:{} }) });
-    await res.json();
-    GAS_URL = url;
-    localStorage.setItem("team_manager_gas_url", url);
-    document.getElementById("create-step-1").classList.add("hidden");
-    document.getElementById("create-step-2").classList.remove("hidden");
-  } catch(e) {
-    errEl.textContent = "URLに接続できませんでした。デプロイのURLが正しいか確認してください。";
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "次へ →";
-  }
+  GAS_URL = url;
+  localStorage.setItem("team_manager_gas_url", url);
+  document.getElementById("create-step-1").classList.add("hidden");
+  document.getElementById("create-step-2").classList.remove("hidden");
 }
 
 function backToStep1() {
