@@ -573,14 +573,128 @@
 
   .setup-url-section label { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
 
+  /* ============ スマホフッター ============ */
+  .mobile-footer {
+    display: none;
+  }
+
+  .mobile-header-bar {
+    display: none;
+  }
+
   /* ============ レスポンシブ ============ */
   @media (max-width: 640px) {
-    :root { --sidebar-w: 100vw; }
-    #app-screen { flex-direction: column; }
-    .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
-    .project-list { max-height: 180px; }
-    .main-header { padding: 14px 16px; }
-    .main-content { padding: 16px; }
+    #app-screen { flex-direction: column; height: 100vh; }
+
+    /* サイドバーをドロワーに */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 80vw;
+      max-width: 300px;
+      height: 100vh;
+      z-index: 50;
+      transform: translateX(-100%);
+      transition: transform .25s;
+      box-shadow: 4px 0 20px rgba(0,0,0,.15);
+    }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-bottom { display: none; }
+
+    /* ドロワー背景 */
+    .drawer-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 49;
+    }
+    .drawer-overlay.show { display: block; }
+
+    /* メインをフル幅に */
+    .main { width: 100%; padding-bottom: 64px; }
+
+    /* モバイルヘッダーバー */
+    .mobile-header-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .mobile-menu-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      padding: 4px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .mobile-ws-name {
+      font-size: 15px;
+      font-weight: 700;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* PC用ヘッダーを隠す */
+    #no-project-msg { padding-top: 40px; }
+    .main-header { display: none; }
+
+    /* モバイル用プロジェクトヘッダー（メインコンテンツ内） */
+    .mobile-proj-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .main-content { padding: 12px 16px; }
+
+    /* フッター */
+    .mobile-footer {
+      display: flex;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      height: 56px;
+      z-index: 40;
+    }
+
+    .mobile-footer-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0;
+      border-radius: 0;
+      min-height: unset;
+    }
+
+    .mobile-footer-btn span {
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .mobile-footer-btn.danger { color: var(--danger); }
   }
 </style>
 </head>
@@ -674,6 +788,15 @@
 <!-- ===================== アプリ画面 ===================== -->
 <div id="app-screen" class="hidden">
 
+  <!-- ドロワー背景（スマホ用） -->
+  <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+
+  <!-- モバイルヘッダーバー -->
+  <div class="mobile-header-bar">
+    <button class="mobile-menu-btn" onclick="toggleDrawer()">☰</button>
+    <span class="mobile-ws-name" id="mobile-ws-name">—</span>
+  </div>
+
   <!-- サイドバー -->
   <aside class="sidebar">
     <div class="sidebar-header">
@@ -700,6 +823,19 @@
     </div>
 
     <div id="project-view" class="hidden" style="display:flex;flex-direction:column;height:100%">
+      <!-- モバイル用プロジェクトヘッダー -->
+      <div class="mobile-proj-header">
+        <div style="flex:1;font-size:15px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="mobile-proj-title">—</div>
+        <div class="progress-ring-wrap" style="width:36px;height:36px">
+          <svg width="36" height="36" viewBox="0 0 44 44">
+            <circle class="progress-ring-bg" cx="22" cy="22" r="18"/>
+            <circle class="progress-ring-val" id="progress-ring-mobile" cx="22" cy="22" r="18"
+              stroke-dasharray="113" stroke-dashoffset="113"/>
+          </svg>
+          <div class="progress-pct" id="progress-pct-mobile" style="font-size:9px">0%</div>
+        </div>
+        <button class="btn-icon" onclick="openProjectEditModal()">⚙️</button>
+      </div>
       <div class="main-header">
         <div class="project-title-display" id="proj-title">プロジェクト名</div>
         <div class="progress-wrap">
@@ -736,6 +872,23 @@
       </div>
     </div>
   </main>
+
+  <!-- モバイルフッター -->
+  <div class="mobile-footer">
+    <button class="mobile-footer-btn" onclick="openProjectModal()">
+      ＋<span>プロジェクト</span>
+    </button>
+    <button class="mobile-footer-btn" onclick="openMemberModal()">
+      👥<span>メンバー</span>
+    </button>
+    <button class="mobile-footer-btn" onclick="copyInviteUrl('sidebar-invite-url')">
+      🔗<span>招待URL</span>
+    </button>
+    <button class="mobile-footer-btn danger" onclick="doLogout()">
+      ←<span>ログアウト</span>
+    </button>
+  </div>
+
 </div>
 
 <!-- ===================== モーダル: プロジェクト追加 ===================== -->
@@ -1102,12 +1255,22 @@ async function doCreate() {
 async function enterWorkspace(wsName) {
   state.workspace = wsName;
   document.getElementById("ws-name-display").textContent = wsName;
+  document.getElementById("mobile-ws-name").textContent = wsName;
   document.getElementById("login-screen").classList.add("hidden");
   document.getElementById("app-screen").classList.remove("hidden");
   const inviteUrl = `${location.origin}${location.pathname}?gas=${encodeURIComponent(GAS_URL)}`;
   document.getElementById("sidebar-invite-url").value = inviteUrl;
 
   await Promise.all([loadMembers(), loadProjects(), loadStats()]);
+}
+
+function toggleDrawer() {
+  document.querySelector(".sidebar").classList.toggle("open");
+  document.getElementById("drawer-overlay").classList.toggle("show");
+}
+function closeDrawer() {
+  document.querySelector(".sidebar").classList.remove("open");
+  document.getElementById("drawer-overlay").classList.remove("show");
 }
 
 function doLogout() {
@@ -1223,7 +1386,10 @@ async function selectProject(id) {
   document.getElementById("no-project-msg").classList.add("hidden");
   document.getElementById("project-view").classList.remove("hidden");
   document.getElementById("proj-title").textContent = state.activeProj.name;
+  document.getElementById("mobile-proj-title").textContent = state.activeProj.name;
   document.getElementById("progress-ring").style.stroke = state.activeProj.color;
+  document.getElementById("progress-ring-mobile").style.stroke = state.activeProj.color;
+  closeDrawer();
 
   await loadTasks();
 }
@@ -1360,7 +1526,9 @@ function renderTasks() {
   const pct   = total ? Math.round(comp / total * 100) : 0;
   const circ  = 2 * Math.PI * 18;
   document.getElementById("progress-ring").style.strokeDashoffset = circ - (circ * pct / 100);
+  document.getElementById("progress-ring-mobile").style.strokeDashoffset = circ - (circ * pct / 100);
   document.getElementById("progress-pct").textContent = pct + "%";
+  document.getElementById("progress-pct-mobile").textContent = pct + "%";
 }
 
 function renderTaskGroup(label, tasks) {
