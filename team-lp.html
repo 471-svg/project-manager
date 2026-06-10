@@ -14,6 +14,7 @@
     --muted   : #7b8299;
     --accent  : #4f8ef7;
     --accent2 : #34c77b;
+    --orange  : #f5a623;
     --font    : -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
   }
 
@@ -28,28 +29,23 @@
 
   a { color: var(--accent); text-decoration: none; }
 
-  /* ============ ユーティリティ ============ */
   .container {
-    max-width: 800px;
+    max-width: 860px;
     margin: 0 auto;
     padding: 0 24px;
   }
-
-  .section { padding: 80px 0; }
-  .section-sm { padding: 48px 0; }
 
   /* ============ ナビ ============ */
   nav {
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(13,15,20,.9);
+    background: rgba(13,15,20,.92);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
   }
-
   .nav-inner {
-    max-width: 800px;
+    max-width: 860px;
     margin: 0 auto;
     padding: 0 24px;
     height: 56px;
@@ -57,17 +53,11 @@
     align-items: center;
     justify-content: space-between;
   }
-
-  .nav-logo {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text);
-  }
-
+  .nav-logo { font-size: 15px; font-weight: 700; color: var(--text); }
   .nav-cta {
     background: var(--accent);
     color: #fff;
-    padding: 8px 18px;
+    padding: 8px 20px;
     border-radius: 20px;
     font-size: 13px;
     font-weight: 700;
@@ -77,16 +67,25 @@
 
   /* ============ ヒーロー ============ */
   .hero {
-    padding: 100px 0 80px;
+    background: linear-gradient(160deg, #1a3a6e 0%, #2557c7 50%, #4f8ef7 100%);
+    padding: 80px 0 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .hero-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
     text-align: center;
   }
 
   .hero-badge {
     display: inline-block;
-    background: rgba(79,142,247,.15);
-    color: var(--accent);
-    border: 1px solid rgba(79,142,247,.3);
-    padding: 5px 14px;
+    background: rgba(255,255,255,.15);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.3);
+    padding: 5px 16px;
     border-radius: 20px;
     font-size: 12px;
     font-weight: 700;
@@ -95,27 +94,20 @@
   }
 
   .hero h1 {
-    font-size: clamp(28px, 5vw, 48px);
+    font-size: clamp(24px, 4.5vw, 44px);
     font-weight: 800;
     line-height: 1.25;
     margin-bottom: 20px;
     letter-spacing: -.02em;
-  }
-
-  .hero h1 em {
-    font-style: normal;
-    background: linear-gradient(135deg, var(--accent), #a78bfa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #fff;
   }
 
   .hero-sub {
-    font-size: 16px;
-    color: var(--muted);
-    max-width: 480px;
+    font-size: 15px;
+    color: rgba(255,255,255,.75);
+    max-width: 520px;
     margin: 0 auto 36px;
-    line-height: 1.8;
+    line-height: 1.9;
   }
 
   .hero-actions {
@@ -123,124 +115,189 @@
     gap: 12px;
     justify-content: center;
     flex-wrap: wrap;
+    margin-bottom: 12px;
   }
 
-  .btn-primary {
-    background: var(--accent);
+  .btn-orange {
+    background: var(--orange);
     color: #fff;
-    padding: 14px 32px;
+    padding: 15px 36px;
     border-radius: 12px;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 800;
     transition: opacity .15s, transform .1s;
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    box-shadow: 0 4px 20px rgba(245,166,35,.4);
   }
-  .btn-primary:hover { opacity: .9; }
-  .btn-primary:active { transform: scale(.98); }
+  .btn-orange:hover { opacity: .92; }
+  .btn-orange:active { transform: scale(.98); }
 
-  .btn-secondary {
-    background: var(--surface2);
-    color: var(--text);
-    padding: 14px 28px;
+  .btn-white {
+    background: rgba(255,255,255,.15);
+    color: #fff;
+    padding: 15px 28px;
     border-radius: 12px;
     font-size: 15px;
-    font-weight: 600;
-    border: 1px solid var(--border);
+    font-weight: 700;
+    border: 1px solid rgba(255,255,255,.3);
     transition: background .15s;
     display: inline-flex;
     align-items: center;
     gap: 8px;
   }
-  .btn-secondary:hover { background: #252a38; }
+  .btn-white:hover { background: rgba(255,255,255,.22); }
 
   .hero-note {
-    margin-top: 16px;
     font-size: 12px;
-    color: var(--muted);
+    color: rgba(255,255,255,.5);
+    margin-bottom: 48px;
   }
 
-  /* スクリーンショット */
-  .screenshot-wrap {
-    margin-top: 60px;
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    box-shadow: 0 24px 80px rgba(0,0,0,.5);
-    background: var(--surface);
+  /* ヒーローモックアップ */
+  .hero-mockup {
+    position: relative;
+    max-width: 720px;
+    margin: 0 auto;
   }
 
-  .screenshot-bar {
-    background: var(--surface2);
-    padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .dot-r { background: #ff5f57; }
-  .dot-y { background: #febc2e; }
-  .dot-g { background: #28c840; }
-
-  .screenshot-img {
+  .hero-mockup img {
     width: 100%;
     display: block;
-    min-height: 320px;
-    background: var(--surface);
-    object-fit: cover;
+    border-radius: 16px 16px 0 0;
   }
 
-  .screenshot-placeholder {
+  .hero-mockup-placeholder {
     width: 100%;
-    min-height: 320px;
-    background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    min-height: 360px;
+    background: rgba(255,255,255,.08);
+    border-radius: 16px 16px 0 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--muted);
+    color: rgba(255,255,255,.4);
     font-size: 13px;
+    border: 1px solid rgba(255,255,255,.1);
+    border-bottom: none;
   }
 
-  /* ============ 課題セクション ============ */
-  .problem-section {
-    background: var(--surface);
-    border-radius: 20px;
-    padding: 48px 40px;
-    border: 1px solid var(--border);
+  /* 進捗バッジ（バナーのような浮いてるUI） */
+  .hero-badge-float {
+    position: absolute;
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.2);
+    font-size: 12px;
+    font-weight: 700;
+    color: #1e2030;
   }
+
+  .hero-badge-float.right {
+    top: 20px;
+    right: -20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pct-ring {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent) 67%, #e5e7eb 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 800;
+    color: #1e2030;
+    position: relative;
+  }
+  .pct-ring::before {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    background: #fff;
+    border-radius: 50%;
+  }
+  .pct-ring span { position: relative; z-index: 1; font-size: 9px; }
+
+  /* ============ 実績バー ============ */
+  .stats-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+
+  .stats-inner {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+  }
+  .stat-label { font-size: 12px; color: var(--muted); }
+
+  /* ============ セクション共通 ============ */
+  .section { padding: 88px 0; }
+  .section-sm { padding: 56px 0; }
 
   .section-label {
     font-size: 11px;
     font-weight: 700;
     color: var(--accent);
     text-transform: uppercase;
-    letter-spacing: .1em;
+    letter-spacing: .12em;
     margin-bottom: 12px;
+    display: block;
   }
 
-  .problem-section h2 {
-    font-size: clamp(20px, 3vw, 28px);
+  .section-title {
+    font-size: clamp(22px, 3.5vw, 32px);
     font-weight: 800;
-    margin-bottom: 28px;
-    line-height: 1.4;
+    line-height: 1.35;
+    margin-bottom: 14px;
+    letter-spacing: -.02em;
+  }
+
+  .section-lead {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.9;
+    margin-bottom: 48px;
+  }
+
+  /* ============ 課題セクション ============ */
+  .problem-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 52px 48px;
   }
 
   .problem-list {
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-bottom: 36px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 32px;
+    margin-bottom: 40px;
   }
 
   .problem-list li {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
-    font-size: 15px;
+    gap: 10px;
+    font-size: 14px;
     color: var(--muted);
     line-height: 1.6;
   }
@@ -248,164 +305,154 @@
   .problem-list li::before {
     content: "✗";
     color: #f25c5c;
-    font-weight: 700;
+    font-weight: 800;
     flex-shrink: 0;
     margin-top: 1px;
   }
 
-  .problem-cta {
-    text-align: center;
-    padding-top: 8px;
-  }
+  .problem-cta { text-align: center; }
 
-  /* ============ 機能セクション ============ */
+  /* ============ 機能グリッド ============ */
   .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
-    margin-top: 40px;
   }
 
   .feature-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px;
-    transition: border-color .2s;
+    border-radius: 16px;
+    padding: 28px 24px;
+    transition: border-color .2s, transform .2s;
   }
-  .feature-card:hover { border-color: rgba(79,142,247,.4); }
-
-  .feature-icon {
-    font-size: 28px;
-    margin-bottom: 12px;
-    display: block;
+  .feature-card:hover {
+    border-color: rgba(79,142,247,.35);
+    transform: translateY(-2px);
   }
 
-  .feature-card h3 {
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
+  .feature-icon { font-size: 28px; margin-bottom: 14px; display: block; }
+  .feature-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .feature-card p { font-size: 13px; color: var(--muted); line-height: 1.75; }
 
-  .feature-card p {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.7;
-  }
-
-  /* ============ スクショ2カラム ============ */
-  .split-section {
+  /* ============ 分割セクション ============ */
+  .split {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    gap: 48px;
     align-items: center;
-    margin-top: 40px;
+    margin-bottom: 72px;
   }
-
-  .split-section.reverse { direction: rtl; }
-  .split-section.reverse > * { direction: ltr; }
+  .split:last-child { margin-bottom: 0; }
+  .split.reverse { direction: rtl; }
+  .split.reverse > * { direction: ltr; }
 
   .split-text h3 {
-    font-size: 20px;
+    font-size: clamp(18px, 2.5vw, 24px);
     font-weight: 800;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     line-height: 1.4;
+    letter-spacing: -.01em;
   }
-
-  .split-text p {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.8;
-  }
+  .split-text p { font-size: 14px; color: var(--muted); line-height: 1.85; }
 
   .split-img {
-    border-radius: 12px;
+    border-radius: 14px;
     overflow: hidden;
     border: 1px solid var(--border);
-    box-shadow: 0 8px 32px rgba(0,0,0,.3);
+    box-shadow: 0 12px 40px rgba(0,0,0,.35);
   }
-
-  .split-img img, .split-img .screenshot-placeholder {
+  .split-img img, .split-img .img-placeholder {
     width: 100%;
     display: block;
-    min-height: 200px;
+    min-height: 220px;
+  }
+  .img-placeholder {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 12px;
   }
 
   /* ============ 差別化ポイント ============ */
   .points-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-top: 40px;
+    gap: 14px;
   }
 
   .point-item {
     display: flex;
     align-items: flex-start;
-    gap: 16px;
+    gap: 20px;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px 24px;
+    border-radius: 16px;
+    padding: 24px 28px;
+    transition: border-color .2s;
   }
+  .point-item:hover { border-color: rgba(79,142,247,.3); }
 
-  .point-icon {
-    font-size: 24px;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  .point-item h3 {
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-
-  .point-item p {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.7;
-  }
+  .point-icon { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+  .point-item h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .point-item p { font-size: 13px; color: var(--muted); line-height: 1.8; }
 
   /* ============ メインCTA ============ */
   .cta-section {
-    text-align: center;
-    background: linear-gradient(135deg, rgba(79,142,247,.1) 0%, rgba(167,139,250,.1) 100%);
-    border: 1px solid rgba(79,142,247,.2);
+    background: linear-gradient(135deg, #1a3a6e 0%, #2557c7 100%);
     border-radius: 24px;
-    padding: 64px 40px;
+    padding: 72px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: "";
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 240px; height: 240px;
+    background: rgba(255,255,255,.05);
+    border-radius: 50%;
   }
 
   .cta-section h2 {
     font-size: clamp(22px, 4vw, 36px);
     font-weight: 800;
-    margin-bottom: 12px;
-    line-height: 1.3;
+    margin-bottom: 14px;
+    line-height: 1.35;
+    color: #fff;
+    letter-spacing: -.02em;
   }
 
   .cta-section p {
     font-size: 15px;
-    color: var(--muted);
-    margin-bottom: 32px;
+    color: rgba(255,255,255,.7);
+    margin-bottom: 36px;
+    line-height: 1.8;
+  }
+
+  .cta-note {
+    margin-top: 16px;
+    font-size: 12px;
+    color: rgba(255,255,255,.45);
   }
 
   /* ============ 使い方ステップ ============ */
   .steps {
-    counter-reset: step;
     display: flex;
     flex-direction: column;
     gap: 0;
-    margin-top: 40px;
-    position: relative;
+    margin-top: 48px;
   }
 
   .step-item {
     display: flex;
-    gap: 20px;
-    padding-bottom: 36px;
-    position: relative;
+    gap: 24px;
+    padding-bottom: 40px;
   }
-
   .step-item:last-child { padding-bottom: 0; }
 
   .step-left {
@@ -416,86 +463,71 @@
   }
 
   .step-num {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     background: var(--accent);
     color: #fff;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    z-index: 1;
+    box-shadow: 0 4px 14px rgba(79,142,247,.4);
   }
 
   .step-line {
     width: 2px;
     flex: 1;
-    background: var(--border);
-    margin-top: 8px;
-    min-height: 24px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    margin-top: 10px;
+    min-height: 20px;
+    opacity: .3;
   }
-
   .step-item:last-child .step-line { display: none; }
 
-  .step-content {
-    padding-top: 6px;
-    flex: 1;
-  }
-
-  .step-content h3 {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-
-  .step-content p {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.8;
-  }
+  .step-content { padding-top: 7px; flex: 1; }
+  .step-content h3 { font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+  .step-content p { font-size: 14px; color: var(--muted); line-height: 1.85; }
 
   .step-img {
-    margin-top: 14px;
-    border-radius: 10px;
+    margin-top: 16px;
+    border-radius: 12px;
     overflow: hidden;
     border: 1px solid var(--border);
+    box-shadow: 0 6px 24px rgba(0,0,0,.25);
   }
-
-  .step-img img, .step-img .screenshot-placeholder {
+  .step-img img, .step-img .img-placeholder {
     width: 100%;
     display: block;
-    min-height: 160px;
+    min-height: 180px;
     font-size: 12px;
   }
 
   /* ============ フッター ============ */
   footer {
     border-top: 1px solid var(--border);
-    padding: 32px 0;
+    padding: 36px 0;
     text-align: center;
   }
-
-  footer p {
-    font-size: 12px;
-    color: var(--muted);
-  }
+  footer p { font-size: 12px; color: var(--muted); line-height: 2; }
 
   /* ============ レスポンシブ ============ */
   @media (max-width: 640px) {
-    .section { padding: 56px 0; }
-    .problem-section { padding: 32px 24px; }
-    .cta-section { padding: 44px 24px; }
-    .split-section { grid-template-columns: 1fr; }
-    .split-section.reverse { direction: ltr; }
+    .problem-wrap { padding: 32px 24px; }
+    .problem-list { grid-template-columns: 1fr; }
     .features-grid { grid-template-columns: 1fr 1fr; }
+    .split { grid-template-columns: 1fr; gap: 28px; }
+    .split.reverse { direction: ltr; }
+    .cta-section { padding: 48px 28px; }
+    .stats-inner { gap: 28px; }
   }
 
   @media (max-width: 400px) {
     .features-grid { grid-template-columns: 1fr; }
     .hero-actions { flex-direction: column; align-items: center; }
+    .hero-badge-float { display: none; }
   }
 </style>
 </head>
@@ -505,51 +537,77 @@
 <nav>
   <div class="nav-inner">
     <span class="nav-logo">📋 チーム制作管理</span>
-    <a class="nav-cta" href="team-manager.html">無料で使う</a>
+    <a class="nav-cta" href="team-manager.html">無料で使う →</a>
   </div>
 </nav>
 
 <!-- ヒーロー -->
 <section class="hero">
-  <div class="container">
+  <div class="hero-inner">
     <div class="hero-badge">✨ 無料 · 登録不要 · インストール不要</div>
-    <h1>チームの「今どこまで<br>進んでる？」を、<em>一瞬で解決。</em></h1>
-    <p class="hero-sub">LINEで進捗確認するのをやめませんか。タスクに担当者を割り当て、進捗をリアルタイムで共有できる制作管理ツールです。</p>
+    <h1>ログイン不要。<br>HTML1枚で、チームの基地が完成。</h1>
+    <p class="hero-sub">
+      制作の進捗確認、まだLINEでやってますか？<br>
+      タスクに担当者を割り当てて、進捗をリアルタイムで共有。<br>
+      クリエイターチームのために美大生が作った、シンプルな制作管理ツールです。
+    </p>
     <div class="hero-actions">
-      <a class="btn-primary" href="team-manager.html">▶ 無料で使ってみる</a>
-      <a class="btn-secondary" href="team-manager.html" download>⬇ ダウンロード</a>
+      <a class="btn-orange" href="team-manager.html">無料でゲットする</a>
+      <a class="btn-white" href="team-manager.html" download>⬇ ダウンロード</a>
     </div>
-    <p class="hero-note">HTMLファイル1つ。Googleアカウントがあれば今日から使えます。</p>
+    <p class="hero-note">Googleアカウントがあれば今日から使えます。</p>
 
-    <!-- スクリーンショット1: タスク一覧画面 -->
-    <div class="screenshot-wrap">
-      <div class="screenshot-bar">
-        <div class="dot dot-r"></div>
-        <div class="dot dot-y"></div>
-        <div class="dot dot-g"></div>
+    <!-- モックアップ -->
+    <div class="hero-mockup">
+      <!-- <img src="images/mockup-hero.png" alt="チーム制作管理ツール"> -->
+      <div class="hero-mockup-placeholder">📸 images/mockup-hero.png（PC＋スマホのモックアップ）</div>
+      <div class="hero-badge-float right">
+        <div class="pct-ring"><span>67%</span></div>
+        <span>LP制作<br><span style="font-size:10px;color:#7b8299;font-weight:400">残り1タスク</span></span>
       </div>
-      <!-- スクショを撮ったら↓のdivをimgタグに差し替え -->
-      <!-- <img class="screenshot-img" src="images/screenshot-main.png" alt="チーム制作管理ツール メイン画面"> -->
-      <div class="screenshot-placeholder">📸 スクリーンショット：タスク一覧画面</div>
     </div>
   </div>
 </section>
 
+<!-- 実績バー -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <span class="stat-num">無料</span>
+      <span class="stat-label">月額0円・ずっと</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">登録不要</span>
+      <span class="stat-label">アカウント作成なし</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">HTML1枚</span>
+      <span class="stat-label">インストール不要</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">即共有</span>
+      <span class="stat-label">招待URLを送るだけ</span>
+    </div>
+  </div>
+</div>
+
 <!-- 課題セクション -->
 <section class="section-sm">
   <div class="container">
-    <div class="problem-section">
-      <p class="section-label">こんな悩み、ありませんか？</p>
-      <h2>チームの制作管理、<br>こうなっていませんか？</h2>
+    <div class="problem-wrap">
+      <span class="section-label">こんな悩み、ありませんか？</span>
+      <h2 class="section-title">チームの制作管理、<br>うまくいっていますか？</h2>
+      <p class="section-lead">「誰が何をやってるか把握できない」「進捗確認のたびに連絡するのが面倒」——小さなチームほど、管理ツールに悩みます。かといってNotionやAsanaは多機能すぎて、使いこなす前に挫折してしまう。そんな経験、ありませんか？</p>
       <ul class="problem-list">
-        <li>「誰が今何をやってるか」がわからない</li>
-        <li>LINEやSlackで進捗確認するのが面倒</li>
-        <li>Notionは多機能すぎて使いこなせない</li>
-        <li>タスクが増えるほど、どこまで終わったかわからなくなる</li>
-        <li>チームメンバーにツールを覚えさせるのが大変</li>
+        <li>誰が今何のタスクをやってるかわからない</li>
+        <li>進捗確認のたびにLINEで「どこまで進んだ？」と聞いている</li>
+        <li>Notionは多機能すぎて結局使われなくなった</li>
+        <li>タスクが増えると「どこまで終わったか」が把握できなくなる</li>
+        <li>新しいメンバーにツールの使い方を覚えてもらうのが大変</li>
+        <li>月額料金がかかるツールは小さなチームには割に合わない</li>
       </ul>
       <div class="problem-cta">
-        <a class="btn-primary" href="team-manager.html">これ、全部解決できます →</a>
+        <a class="btn-orange" href="team-manager.html">これ、全部解決できます →</a>
       </div>
     </div>
   </div>
@@ -558,63 +616,75 @@
 <!-- 機能紹介 -->
 <section class="section">
   <div class="container">
-    <p class="section-label">機能</p>
-    <h2 style="font-size:clamp(20px,3vw,28px);font-weight:800;line-height:1.4">必要なものだけ、シンプルに。</h2>
+    <span class="section-label">機能</span>
+    <h2 class="section-title">必要なものだけ、シンプルに。</h2>
+    <p class="section-lead">複雑な設定は要りません。タスクを追加して、担当者を決めて、チェックを入れるだけ。それだけでチーム全員の進捗が見えるようになります。</p>
 
     <div class="features-grid">
       <div class="feature-card">
         <span class="feature-icon">👥</span>
         <h3>担当者を割り当て</h3>
-        <p>タスクにメンバーの名前を紐付け。誰が何をやるか一目でわかります。</p>
+        <p>タスクにメンバーの名前を紐付け。誰が何をやるか一目でわかるので、認識のズレが生まれません。自分のタスクだけをフィルターして表示することもできます。</p>
       </div>
       <div class="feature-card">
         <span class="feature-icon">📊</span>
         <h3>進捗をリアルタイム可視化</h3>
-        <p>チェックを入れるたびにリングと%が更新。プロジェクトの今が一瞬でわかります。</p>
+        <p>タスクにチェックを入れるたびに、進捗リングとパーセンテージが自動更新。プロジェクト全体の「今」が数字で見えるので、報告のための集計作業が不要です。</p>
       </div>
       <div class="feature-card">
         <span class="feature-icon">🔒</span>
         <h3>パスワードで安心共有</h3>
-        <p>ワークスペースにパスワードを設定。チームメンバーだけが入室できます。</p>
+        <p>ワークスペースにパスワードを設定できます。URLを知っていても、パスワードがなければ入室できないので、チーム外に情報が漏れる心配がありません。</p>
       </div>
       <div class="feature-card">
         <span class="feature-icon">📁</span>
         <h3>プロジェクトをまとめて管理</h3>
-        <p>複数の案件をカラーで色分けして管理。サイドバーから素早く切り替えできます。</p>
+        <p>複数の案件をひとつのワークスペースで管理。カラーで色分けされ、サイドバーから素早く切り替えが可能。案件が増えても整理されたまま使えます。</p>
       </div>
       <div class="feature-card">
         <span class="feature-icon">📝</span>
         <h3>スプレッドシートに記録が残る</h3>
-        <p>すべてのデータはGoogleスプレッドシートに保存。記録の確認・バックアップも簡単です。</p>
+        <p>すべてのデータはGoogleスプレッドシートに自動保存。過去の記録の確認や、データの書き出し・集計も自由。大切な制作記録が消えることはありません。</p>
       </div>
       <div class="feature-card">
         <span class="feature-icon">📱</span>
         <h3>スマホでも確認できる</h3>
-        <p>移動中もスマホで進捗チェック。PCとスマホどちらでも快適に使えます。</p>
+        <p>移動中や外出先からでも、スマホのブラウザで進捗を確認できます。PCとスマホ、どちらでも快適に使えるデザインです。</p>
       </div>
     </div>
 
-    <!-- スクリーンショット2: サイドバー+進捗 -->
-    <div style="margin-top:48px">
-      <div class="split-section">
+    <!-- 機能詳細スクショ -->
+    <div style="margin-top:72px">
+      <div class="split">
         <div class="split-text">
           <h3>プロジェクトごとの進捗が<br>サイドバーで一覧できる</h3>
-          <p>複数のプロジェクトを同時に抱えていても、サイドバーに進捗%と残りタスク数が表示されるので全体把握が簡単です。</p>
+          <p>複数のプロジェクトを同時に抱えていても、サイドバーに進捗%と残りタスク数が表示されるので全体把握が簡単です。どの案件が遅れているか、一目でわかります。</p>
         </div>
         <div class="split-img">
-          <!-- <img src="images/screenshot-sidebar.png" alt="サイドバー進捗表示"> -->
-          <div class="screenshot-placeholder">📸 スクリーンショット：サイドバー</div>
+          <!-- <img src="images/mockup-sidebar.png" alt="サイドバー進捗表示"> -->
+          <div class="img-placeholder">📸 images/mockup-sidebar.png</div>
         </div>
       </div>
 
-      <div class="split-section reverse" style="margin-top:32px">
+      <div class="split reverse">
         <div class="split-text">
           <h3>担当者フィルターで<br>自分のタスクだけ表示</h3>
-          <p>メンバーの名前をタップするだけで自分のタスクだけに絞れます。毎日の「今日やること」確認がスムーズです。</p>
+          <p>メンバーの名前をタップするだけで自分のタスクだけに絞れます。毎日の「今日やること」確認がスムーズ。チーム全員・自分だけ、いつでも切り替えられます。</p>
         </div>
         <div class="split-img">
-          <!-- <img src="images/screenshot-filter.png" alt="担当者フィルター"> -->
-          <div class="screenshot-placeholder">📸 スクリーンショット：担当者フィルター</div>
+          <!-- <img src="images/mockup-filter.png" alt="担当者フィルター"> -->
+          <div class="img-placeholder">📸 images/mockup-filter.png</div>
+        </div>
+      </div>
+
+      <div class="split">
+        <div class="split-text">
+          <h3>タスクの完了がリングで<br>リアルタイムに反映される</h3>
+          <p>チェックを入れるたびに進捗リングがぐるっと進みます。「あとどれくらいか」が視覚的に伝わるので、チームのモチベーション維持にも効果的です。</p>
+        </div>
+        <div class="split-img">
+          <!-- <img src="images/mockup-tasks.png" alt="タスク進捗リング"> -->
+          <div class="img-placeholder">📸 images/mockup-tasks.png</div>
         </div>
       </div>
     </div>
@@ -622,37 +692,39 @@
 </section>
 
 <!-- 差別化ポイント -->
-<section class="section">
+<section class="section" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
   <div class="container">
-    <p class="section-label">他のツールとの違い</p>
-    <h2 style="font-size:clamp(20px,3vw,28px);font-weight:800;line-height:1.4">シンプルだから、<br>続けられる。</h2>
+    <span class="section-label">他のツールとの違い</span>
+    <h2 class="section-title">シンプルだから、続けられる。</h2>
+    <p class="section-lead">「高機能なツールを入れたけど、結局誰も使わなくなった」という経験はありませんか？このツールは「クリエイターが制作しながら使い続けられること」だけを考えて作りました。</p>
+
     <div class="points-list">
       <div class="point-item">
         <span class="point-icon">⚡</span>
         <div>
           <h3>インストールも会員登録も不要</h3>
-          <p>HTMLファイルをダウンロードしてブラウザで開くだけ。難しい設定は一切ありません。チームメンバーへの共有は招待URLを送るだけです。</p>
+          <p>HTMLファイルをダウンロードしてブラウザで開くだけで使えます。アプリのインストールも、アカウント作成も一切不要。チームメンバーへの共有は、発行された招待URLを送るだけで完了します。メンバーはパスワードを入れるだけで即入室できます。</p>
         </div>
       </div>
       <div class="point-item">
         <span class="point-icon">💰</span>
         <div>
           <h3>完全無料・ずっと無料</h3>
-          <p>月額料金なし、人数制限なし。Googleアカウントさえあれば今日から無料で使い始められます。</p>
+          <p>月額料金なし、人数制限なし、機能制限なし。Googleアカウントさえあれば、何人で使っても、何プロジェクト作っても、ずっと無料です。</p>
         </div>
       </div>
       <div class="point-item">
         <span class="point-icon">📊</span>
         <div>
-          <h3>データはあなたのスプレッドシートに</h3>
-          <p>すべてのタスクや進捗はGoogleスプレッドシートに記録されます。データは自分で管理できるので安心。エクスポートや集計も自由です。</p>
+          <h3>データはあなたのGoogleスプレッドシートに</h3>
+          <p>タスクや進捗のデータはすべて自分のGoogleスプレッドシートに保存されます。外部サービスにデータを預けないので、サービス終了でデータが消える心配がありません。スプレッドシートを直接開いて確認・編集することもできます。</p>
         </div>
       </div>
       <div class="point-item">
         <span class="point-icon">🎨</span>
         <div>
-          <h3>クリエイターのために作られた</h3>
-          <p>美大生が自分たちの制作チームのために作ったツール。デザイン・イラスト・映像など、制作現場の使いやすさを徹底的に考えています。</p>
+          <h3>クリエイターのために美大生が作った</h3>
+          <p>大手企業向けのプロジェクト管理ツールではなく、デザイン・イラスト・映像・Web制作など、クリエイターチームの現場感覚から生まれたツールです。余計な機能を省いて、制作に集中できる環境を作ることを目指しました。</p>
         </div>
       </div>
     </div>
@@ -664,12 +736,12 @@
   <div class="container">
     <div class="cta-section">
       <h2>今日から、チームの制作管理を<br>シンプルにしませんか？</h2>
-      <p>無料・登録不要・HTMLひとつで始められます。</p>
+      <p>無料・登録不要・HTMLひとつで始められます。<br>管理者がセットアップすれば、メンバーは招待URLを開くだけ。</p>
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-        <a class="btn-primary" href="team-manager.html">▶ 無料で使ってみる</a>
-        <a class="btn-secondary" href="team-manager.html" download>⬇ ダウンロード</a>
+        <a class="btn-orange" href="team-manager.html">無料でゲットする</a>
+        <a class="btn-white" href="team-manager.html" download>⬇ ダウンロード</a>
       </div>
-      <p style="margin-top:16px;font-size:12px;color:var(--muted)">Googleアカウントが必要です（無料）</p>
+      <p class="cta-note">Googleアカウントが必要です（無料）</p>
     </div>
   </div>
 </section>
@@ -677,12 +749,11 @@
 <!-- 使い方ステップ -->
 <section class="section">
   <div class="container">
-    <p class="section-label">使い方</p>
-    <h2 style="font-size:clamp(20px,3vw,28px);font-weight:800;line-height:1.4">セットアップは<br>5ステップで完了。</h2>
-    <p style="font-size:14px;color:var(--muted);margin-top:10px">管理者が1回設定するだけ。メンバーは招待URLを開いてパスワードを入れるだけで使えます。</p>
+    <span class="section-label">使い方</span>
+    <h2 class="section-title">セットアップは<br>5ステップで完了。</h2>
+    <p class="section-lead" style="margin-bottom:0">管理者が1回だけ設定すれば、あとはメンバーが招待URLを開いてパスワードを入れるだけ。難しい操作は一切ありません。</p>
 
     <div class="steps">
-
       <div class="step-item">
         <div class="step-left">
           <div class="step-num">1</div>
@@ -690,7 +761,7 @@
         </div>
         <div class="step-content">
           <h3>HTMLファイルをダウンロード</h3>
-          <p>このページからダウンロードしてブラウザで開くだけ。インストール不要です。</p>
+          <p>このページの「ダウンロード」ボタンを押して、HTMLファイルを保存します。ダウンロードしたファイルをブラウザで開けばアプリが起動します。インストールは不要です。</p>
         </div>
       </div>
 
@@ -701,7 +772,7 @@
         </div>
         <div class="step-content">
           <h3>Googleスプレッドシートを作成</h3>
-          <p><a href="https://sheets.new" target="_blank">sheets.new</a> を開いて新しいスプレッドシートを作成します。名前は何でもOK。</p>
+          <p><a href="https://sheets.new" target="_blank">sheets.new</a> を開いて新しいスプレッドシートを作成します。このスプレッドシートがデータの保存場所になります。名前は何でもOKです。</p>
         </div>
       </div>
 
@@ -712,10 +783,10 @@
         </div>
         <div class="step-content">
           <h3>Apps Scriptにコードを貼り付ける</h3>
-          <p>スプレッドシートの「拡張機能 → Apps Script」を開き、アプリ内に表示されるコードをコピペして保存。</p>
+          <p>スプレッドシートのメニューから「拡張機能 → Apps Script」を開きます。アプリのセットアップ画面に表示されるコードをコピーして貼り付け、保存するだけ。プログラミングの知識は不要です。</p>
           <div class="step-img">
             <!-- <img src="images/step-gas.png" alt="Apps Script セットアップ"> -->
-            <div class="screenshot-placeholder">📸 スクリーンショット：Apps Script画面</div>
+            <div class="img-placeholder">📸 images/step-gas.png（Apps Script画面）</div>
           </div>
         </div>
       </div>
@@ -727,10 +798,10 @@
         </div>
         <div class="step-content">
           <h3>ウェブアプリとしてデプロイ</h3>
-          <p>「デプロイ → 新しいデプロイ → ウェブアプリ」を選択。アクセスを「全員」に設定してデプロイするとURLが発行されます。</p>
+          <p>「デプロイ → 新しいデプロイ → ウェブアプリ」を選択。アクセスを「全員」に設定してデプロイすると、アプリとスプレッドシートをつなぐURLが発行されます。</p>
           <div class="step-img">
             <!-- <img src="images/step-deploy.png" alt="デプロイ画面"> -->
-            <div class="screenshot-placeholder">📸 スクリーンショット：デプロイ画面</div>
+            <div class="img-placeholder">📸 images/step-deploy.png（デプロイ画面）</div>
           </div>
         </div>
       </div>
@@ -741,19 +812,19 @@
           <div class="step-line"></div>
         </div>
         <div class="step-content">
-          <h3>URLを貼り付けてワークスペースを作成</h3>
-          <p>発行されたURLをアプリのセットアップ画面に貼り付け、ワークスペース名とパスワードを設定したら完了。招待URLをメンバーに送りましょう。</p>
+          <h3>ワークスペースを作成して招待URLを共有</h3>
+          <p>発行されたURLをアプリのセットアップ画面に貼り付け、ワークスペース名とパスワードを設定すれば完了。自動で生成される招待URLをチームメンバーに送れば、メンバーはパスワードを入れるだけで入室できます。</p>
           <div class="step-img">
-            <!-- <img src="images/step-setup.png" alt="セットアップ画面"> -->
-            <div class="screenshot-placeholder">📸 スクリーンショット：セットアップ完了画面</div>
+            <!-- <img src="images/step-setup.png" alt="セットアップ完了・招待URL"> -->
+            <div class="img-placeholder">📸 images/step-setup.png（招待URL画面）</div>
           </div>
         </div>
       </div>
-
     </div>
 
-    <div style="text-align:center;margin-top:48px">
-      <a class="btn-primary" href="team-manager.html">▶ 無料で使ってみる</a>
+    <div style="text-align:center;margin-top:56px">
+      <a class="btn-orange" href="team-manager.html">無料でゲットする</a>
+      <p style="margin-top:12px;font-size:12px;color:var(--muted)">Googleアカウントが必要です（無料）</p>
     </div>
   </div>
 </section>
@@ -761,7 +832,10 @@
 <!-- フッター -->
 <footer>
   <div class="container">
-    <p>チーム制作管理ツール · 美大生クリエイターが作りました · <a href="project-manager.html">個人用はこちら</a></p>
+    <p>
+      チーム制作管理ツール · 美大生クリエイターが作りました<br>
+      <a href="project-manager.html">個人用の制作管理ツールはこちら</a>
+    </p>
   </div>
 </footer>
 
