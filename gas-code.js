@@ -291,7 +291,7 @@ function generateId() {
 
 function hashPassword(password) {
   const bytes = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, password);
-  return bytes.map(b => ("0" + (b & 0xff).toString(16)).slice(-2)).join("");
+  return bytes.map(byte => ("0" + (byte & 0xff).toString(16)).slice(-2)).join("");
 }
 
 function requireParams(params) {

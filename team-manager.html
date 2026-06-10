@@ -743,9 +743,9 @@
             <div class="step-content">
               <p>Apps Script にコードを貼り付ける</p>
               <small>「拡張機能」→「Apps Script」を開き、中身を全部削除して下のコードを貼り付けて保存。</small>
-              <div style="position:relative;margin-top:8px">
+              <div style="margin-top:8px">
                 <div class="code-block" id="gas-code-display"></div>
-                <button class="copy-btn" onclick="copyGasCode()">コピー</button>
+                <button class="btn-primary" style="width:100%;margin-top:8px;justify-content:center" onclick="copyGasCode()">📋 コードをコピーする</button>
               </div>
             </div>
           </div>
@@ -1135,7 +1135,7 @@ function updateRowWhere(sheet,pred,updater) {
   for(let i=1;i<data.length;i++) if(pred(data[i])) { const u=updater([...data[i]]); sheet.getRange(i+1,1,1,u.length).setValues([u]); return; }
 }
 function generateId() { return Utilities.getUuid().replace(/-/g,"").slice(0,16); }
-function hashPassword(p) { const b=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,p); return b.map(x=>("0"+(x&0xff).toString(16)).slice(-2)).join(""); }
+function hashPassword(p) { const bytes=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,p); return bytes.map(x=>("0"+(x&0xff).toString(16)).slice(-2)).join(""); }
 function requireParams(p) { for(const[k,v] of Object.entries(p)) if(v===undefined||v===null||v==="") throw new Error("パラメーター '"+k+"' が必要です"); }
 function parseBody(e) { try { return JSON.parse(e.postData.contents); } catch(_) { return {}; } }
 function json(d) { return ContentService.createTextOutput(JSON.stringify(d)).setMimeType(ContentService.MimeType.JSON); }`;
